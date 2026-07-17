@@ -1,0 +1,2119 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELYAF MEKANİK BAKIM VARDİYA TAKİP</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1017;
+    --surface: #161b25;
+    --surface2: #1e2535;
+    --border: #2a3448;
+    --border2: #334060;
+    --orange: #f97316;
+    --accent: #f59e0b;
+    --accent2: #fbbf24;
+    --blue: #3b82f6;
+    --green: #10b981;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+    --text: #f1f5f9;
+    --text2: #cbd5e1;
+    --text3: #94a3b8;
+    --orange: #f97316;
+  }
+
+  /* AÇIK TEMA */
+  body.light {
+    --bg: #f4f6fa;
+    --surface: #ffffff;
+    --surface2: #eef1f7;
+    --border: #dde2ee;
+    --border2: #c8cedf;
+    --accent: #d97706;
+    --accent2: #f59e0b;
+    --blue: #2563eb;
+    --green: #059669;
+    --red: #dc2626;
+    --purple: #7c3aed;
+    --text: #0f172a;
+    --text2: #1e293b;
+    --text3: #475569;
+    --orange: #f97316;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif;
+    min-height: 100vh; overflow-x: hidden;
+    font-size: 15px; line-height: 1.6;
+    transition: background 0.35s ease, color 0.35s ease;
+  }
+  body * { transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease; }
+  body::before { display: none; }
+  body.light::before { display: none; }
+
+  /* TEMA BUTONU */
+  .theme-btn {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    cursor: pointer;
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .theme-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(245,158,11,0.08); }
+
+  /* AÇIK TEMA — özel ince ayarlar */
+  body.light .sch-work-08 { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+  body.light .sch-work-16 { background: #dbeafe; color: #1e3a8a; border-color: #93c5fd; }
+  body.light .sch-work-24 { background: #d1fae5; color: #065f46; border-color: #6ee7b7; }
+  body.light .sch-work-gunduz { background: #fefce8; color: #78350f; border-color: #fde68a; }
+  body.light .sch-work-gd     { background: #ccfbf1; color: #134e4a; border-color: #5eead4; }
+  body.light [style*="background:#1a0a00"] { background: #fff7ed !important; color: #c2410c !important; border-color: #fdba74 !important; }
+  body.light .sch-off { background: #f9fafb; color: var(--text3); }
+  body.light .sch-today { background: #fffbeb; color: var(--accent); border-color: #fcd34d; }
+  body.light .isletme-badge { background: #eff6ff; color: var(--blue); border-color: #bfdbfe; }
+  body.light select option { background: #ffffff; color: #111827; }
+  body.light input[type="date"], body.light select, body.light input[type="text"] { background: #ffffff; }
+  body.light .modal { box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+  body.light ::-webkit-scrollbar-track { background: #f0f2f5; }
+  body.light ::-webkit-scrollbar-thumb { background: #c0c5d0; }
+
+  header { background: var(--surface); border-bottom: 2px solid var(--accent); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-icon { width: 36px; height: 36px; border: 2px solid var(--accent); display: grid; grid-template-columns: 1fr 1fr; gap: 3px; padding: 4px; transform: rotate(45deg); }
+  .logo-icon span { background: var(--accent); display: block; }
+  .logo-icon span:nth-child(3) { background: transparent; }
+  .logo-text { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 22px; letter-spacing: 4px; color: var(--accent); }
+  .logo-sub { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text3); letter-spacing: 2px; margin-top: -2px; }
+  .header-clock { font-family: 'Share Tech Mono', monospace; font-size: 20px; color: var(--accent); text-align: right; }
+  .header-date { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text2); margin-top: 2px; letter-spacing: 1px; }
+
+  .tabs { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 32px; }
+  .tab { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 3px; padding: 14px 24px; cursor: pointer; color: var(--text3); border-bottom: 3px solid transparent; transition: all 0.2s; text-transform: uppercase; }
+  .tab:hover { color: var(--text2); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .main { padding: 24px 32px; max-width: 1400px; margin: 0 auto; }
+  .panel { background: var(--surface); border: 1px solid var(--border); display: none; }
+  .panel.active { display: block; }
+  .panel-header { background: var(--surface2); border-bottom: 1px solid var(--border); padding: 16px 22px; display: flex; align-items: center; gap: 10px; }
+  .panel-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; }
+
+  .query-grid { display: grid; grid-template-columns: 320px 1fr; }
+  .query-left { padding: 24px; border-right: 1px solid var(--border); }
+  .query-right { padding: 24px; }
+
+  .field-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text2); margin-bottom: 8px; text-transform: uppercase; }
+  .field-group { margin-bottom: 18px; }
+
+  input[type="date"], select, input[type="text"] {
+    width: 100%; background: var(--bg); border: 1px solid var(--border2); color: var(--text);
+    padding: 11px 14px; font-family: 'Share Tech Mono', monospace; font-size: 14px; outline: none; transition: border-color 0.2s; -webkit-appearance: none;
+    border-radius: 4px;
+  }
+  input[type="date"]:focus, select:focus, input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  select option { background: var(--surface2); }
+
+  .btn { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; padding: 12px 24px; cursor: pointer; border: none; transition: all 0.2s; }
+  .btn-primary { background: var(--accent); color: var(--bg); }
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-secondary { background: transparent; color: var(--text2); border: 1px solid var(--border2); }
+  .btn-secondary:hover { border-color: var(--text2); color: var(--text); }
+  .btn-danger { background: transparent; color: var(--red); border: 1px solid rgba(239,68,68,0.35); padding: 5px 10px; font-size: 11px; letter-spacing: 1px; }
+  .btn-danger:hover { background: #7f1d1d22; }
+  .btn-edit { background: transparent; color: var(--blue); border: 1px solid rgba(59,130,246,0.35); padding: 5px 10px; font-size: 11px; letter-spacing: 1px; }
+  .btn-edit:hover { background: #1e3a5f44; }
+  .btn-save { background: var(--green); color: var(--bg); padding: 10px 20px; }
+  .btn-save:hover { opacity: 0.85; }
+  .btn-leave { background: transparent; color: #f97316; border: 1px solid rgba(249,115,22,0.35); padding: 5px 10px; font-size: 11px; letter-spacing: 1px; }
+  .btn-leave:hover { background: #7c2d1222; }
+
+  .shift-block { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 13px; flex-shrink: 0; }
+  .shift-A  { background: #f59e0b; color: #0a0c10; }
+  .shift-B  { background: #3b82f6; color: #fff; }
+  .shift-C  { background: #10b981; color: #0a0c10; }
+  .shift-D  { background: #8b5cf6; color: #fff; }
+  .shift-AG { background: #f59e0b88; color: #0a0c10; border: 1px solid #f59e0b; }
+  .shift-BG { background: #3b82f688; color: #fff; border: 1px solid #3b82f6; }
+  .shift-CG { background: #10b98188; color: #0a0c10; border: 1px solid #10b981; }
+  .shift-DG { background: #8b5cf688; color: #fff; border: 1px solid #8b5cf6; }
+  .shift-GD { background: #0d9488; color: #fff; }
+
+  .time-slot { border-bottom: 1px solid var(--border); }
+  .time-slot:last-child { border-bottom: none; }
+  .time-slot-header { padding: 12px 20px; display: flex; align-items: center; gap: 12px; background: var(--surface2); border-bottom: 1px solid var(--border); }
+  .time-badge { font-family: 'Share Tech Mono', monospace; font-size: 12px; padding: 4px 10px; border: 1px solid; }
+  .time-badge.active-slot { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .time-badge.inactive-slot { color: var(--text3); border-color: var(--border2); }
+  .slot-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: 2px; font-size: 13px; }
+  .active-label { color: var(--accent); }
+  .inactive-label { color: var(--text3); }
+
+  .personnel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1px; background: var(--border); }
+  .personnel-card { background: var(--surface); padding: 13px 16px; display: flex; align-items: center; gap: 10px; transition: background 0.15s; }
+  .personnel-card:hover { background: var(--surface2); }
+  .personnel-info { flex: 1; min-width: 0; }
+  .personnel-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .personnel-id { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .status-working { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .status-off { background: var(--text3); }
+
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
+  .stat-card { background: var(--surface); padding: 18px 22px; }
+  .stat-value { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 40px; line-height: 1; color: var(--accent); }
+  .stat-label { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text2); letter-spacing: 2px; margin-top: 6px; }
+
+  .add-form { padding: 22px 24px; border-bottom: 1px solid var(--border); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr 170px 130px auto; gap: 10px; align-items: end; }
+  .personnel-table { width: 100%; border-collapse: collapse; }
+  .personnel-table th { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px; color: var(--accent); text-align: left; padding: 13px 20px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+  .personnel-table td { padding: 13px 20px; border-bottom: 1px solid var(--border); font-size: 15px; vertical-align: middle; }
+  .personnel-table tr:last-child td { border-bottom: none; }
+  .personnel-table tr:hover td { background: var(--surface2); }
+
+  .schedule-controls { padding: 16px 22px; display: flex; gap: 12px; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .schedule-grid-wrapper { overflow-x: auto; padding: 18px 22px; }
+  .schedule-header-row { display: grid; grid-template-columns: 210px repeat(7, 1fr); gap: 2px; margin-bottom: 2px; }
+  .schedule-body-row { display: grid; grid-template-columns: 210px repeat(7, 1fr); gap: 2px; margin-bottom: 2px; }
+  .sch-cell { padding: 8px 5px; font-family: 'Share Tech Mono', monospace; font-size: 11px; text-align: center; }
+  .sch-head { background: var(--surface2); color: var(--text3); letter-spacing: 1px; }
+  .sch-today { background: #1a1500; color: var(--accent); border: 1px solid #3d3000; }
+  .sch-name { background: var(--surface2); text-align: left; padding-left: 10px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; color: var(--text2); display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+  .sch-work { font-size: 10px; font-weight: bold; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1px; }
+  .sch-off { background: var(--bg); color: var(--text3); font-size: 10px; display: flex; align-items: center; justify-content: center; }
+  .sch-work-08 { background: #2d1f00; color: #fbbf24; border: 1px solid #78450a; }
+  .sch-work-16 { background: #0f1e3d; color: #93c5fd; border: 1px solid #1d4ed8; }
+  .sch-work-24 { background: #0b2418; color: #6ee7b7; border: 1px solid #065f46; }
+  .sch-work-gunduz { background: #271a00; color: #fde68a; border: 1px solid #92400e; }
+  .sch-work-gd     { background: #0d2e2c; color: #5eead4; border: 1px solid #0f766e; }
+
+  .shift-legend { display: flex; gap: 14px; padding: 10px 20px; border-bottom: 1px solid var(--border); background: var(--surface2); flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text3); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  .empty-state { padding: 48px; text-align: center; color: var(--text3); font-family: 'Barlow Condensed', sans-serif; font-size: 16px; letter-spacing: 2px; }
+  .no-results { padding: 24px; text-align: center; color: var(--text3); font-family: 'Share Tech Mono', monospace; font-size: 12px; }
+  .divider-line { height: 1px; background: var(--border); }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .live-dot { display: inline-block; width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: blink 1.5s infinite; margin-right: 6px; box-shadow: 0 0 6px var(--green); }
+
+  .isletme-badge { font-family: 'Share Tech Mono', monospace; font-size: 11px; padding: 2px 7px; background: rgba(59,130,246,0.12); color: var(--blue); border: 1px solid rgba(59,130,246,0.35); }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; top:0;left:0;right:0;bottom:0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--accent); padding: 28px; width: 460px; max-width: 95vw; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
+  .modal-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 18px; letter-spacing: 3px; color: var(--accent); margin-bottom: 22px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 22px; justify-content: flex-end; }
+
+  .kiv-hat-btn {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px;
+    letter-spacing: 2px; padding: 6px 14px; cursor: pointer; border: 1px solid var(--border2);
+    background: transparent; color: var(--text2); transition: all 0.18s; text-transform: uppercase;
+  }
+  .kiv-hat-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .kiv-hat-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .kiv-stat-card { background: var(--surface); padding: 14px 18px; }
+  .kiv-stat-val { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 28px; color: var(--accent); }
+  .kiv-stat-lbl { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--text3); letter-spacing: 1px; margin-top: 3px; }
+  .kiv-hat-badge { display:inline-block; padding: 2px 8px; font-family:'Share Tech Mono',monospace; font-size:10px; font-weight:700; border:1px solid; border-radius:2px; }
+  .kiv-hat-1 { background:rgba(245,158,11,.12); color:#f59e0b; border-color:rgba(245,158,11,.4); }
+  .kiv-hat-2 { background:rgba(59,130,246,.12); color:#60a5fa; border-color:rgba(59,130,246,.4); }
+  .kiv-hat-3 { background:rgba(16,185,129,.12); color:#34d399; border-color:rgba(16,185,129,.4); }
+  .kiv-hat-4 { background:rgba(139,92,246,.12); color:#a78bfa; border-color:rgba(139,92,246,.4); }
+  .kiv-hat-5 { background:rgba(239,68,68,.12); color:#f87171; border-color:rgba(239,68,68,.4); }
+  .kiv-hat-6 { background:rgba(20,184,166,.12); color:#2dd4bf; border-color:rgba(20,184,166,.4); }
+
+  :root { --x: 1; } /* placeholder */
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); }
+
+  @media (max-width: 900px) {
+    .query-grid { grid-template-columns: 1fr; }
+    .query-left { border-right: none; border-bottom: 1px solid var(--border); }
+    .form-row { grid-template-columns: 1fr 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    header { padding: 0 14px; }
+    .main { padding: 10px; }
+    .tabs { padding: 0 10px; }
+    .tab { padding: 11px 10px; font-size: 11px; letter-spacing: 1px; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon"><span></span><span></span><span></span><span></span></div>
+    <div>
+      <div class="logo-text" style="font-size:16px;letter-spacing:2px">ELYAF MEKANİK BAKIM VARDİYA TAKİP</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Tema Değiştir">🌙</button>
+    <div style="text-align:right">
+      <div class="header-clock" id="liveClock">--:--:--</div>
+      <div class="header-date" id="liveDate">-- --- ----</div>
+    </div>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('query')">⬡ SORGULA</div>
+  <div class="tab" onclick="switchTab('personnel')">⬡ PERSONEL</div>
+  <div class="tab" onclick="switchTab('schedule')">⬡ ÇALIŞMA TAKVİMİ</div>
+  <div class="tab" onclick="switchTab('adamhour')">⬡ ADAM/SAAT</div>
+  <div class="tab" onclick="switchTab('kivircik')">⬡ KIVIRCIK TAKİP</div>
+  <div class="tab" onclick="switchTab('mono_omur')">⬡ MONO SİLİNDİR ÖMRÜ</div>
+</div>
+
+<div class="main">
+
+  <!-- QUERY TAB -->
+  <div id="tab-query" class="panel active">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">TOPLAM PERSONEL</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-working" style="color:var(--green)">0</div>
+        <div class="stat-label">ŞU AN ÇALIŞAN</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-off" style="color:#f97316">0</div>
+        <div class="stat-label">İZİNDE</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-shift" style="color:var(--blue);font-size:22px;padding-top:6px">--</div>
+        <div class="stat-label">AKTİF VARDİYA</div>
+      </div>
+    </div>
+
+    <div class="query-grid">
+      <div class="query-left">
+        <div class="panel-header" style="margin:-24px -24px 20px -24px">
+          <div class="panel-title">SORGULAMA PARAMETRELERİ</div>
+        </div>
+        <div class="field-group">
+          <div class="field-label">TARİH</div>
+          <input type="date" id="queryDate">
+        </div>
+        <div class="field-group">
+          <div class="field-label">VARDİYA SAATİ</div>
+          <select id="querySlot">
+            <option value="S">☀ SABAH — 08:00-16:00</option>
+            <option value="A">🌆 AKŞAM — 16:00-24:00</option>
+            <option value="G">🌙 GECE — 00:00-08:00</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <div class="field-label">İŞLETME (OPSİYONEL)</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2)">
+              <input type="checkbox" id="filterCP11" value="CP11" style="width:14px;height:14px;accent-color:var(--accent);cursor:pointer"> CP11
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2)">
+              <input type="checkbox" id="filterCP8" value="CP8" style="width:14px;height:14px;accent-color:var(--accent);cursor:pointer"> CP8
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2)">
+              <input type="checkbox" id="filterCP1237" value="CP1237" style="width:14px;height:14px;accent-color:var(--accent);cursor:pointer"> CP1237
+            </label>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="queryNow()">ŞU AN</button>
+          <button class="btn btn-secondary" onclick="querySelected()">SORGULA</button>
+        </div>
+      </div>
+      <div class="query-right">
+        <div class="panel-header" style="margin:-24px -24px 20px -24px">
+          <div class="panel-title"><span class="live-dot"></span>SONUÇLAR</div>
+        </div>
+        <div id="queryInfo" style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text3);letter-spacing:1px;margin-bottom:16px;line-height:2"></div>
+        <div id="queryResults" class="no-results">Sorgu yapmak için soldaki butonları kullanın.</div>
+      </div>
+    </div>
+
+    <div class="divider-line"></div>
+    <div id="fullResults"></div>
+  </div>
+
+  <!-- PERSONNEL TAB -->
+  <div id="tab-personnel" class="panel">
+    <div class="panel-header" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div class="panel-title">PERSONEL YÖNETİMİ</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:2px">ARA:</span>
+        <input type="text" id="personnelSearch" placeholder="Ad veya sicil no..." oninput="renderPersonnelList()"
+          style="width:220px;padding:7px 12px;font-size:13px;background:var(--bg);border:1px solid var(--border2);color:var(--text);font-family:'Share Tech Mono',monospace">
+      </div>
+    </div>
+    <div class="add-form">
+      <div class="field-label" style="margin-bottom:12px">YENİ PERSONEL EKLE</div>
+      <div class="form-row">
+        <div>
+          <div class="field-label">AD SOYAD</div>
+          <input type="text" id="pName" placeholder="Ahmet Yılmaz">
+        </div>
+        <div>
+          <div class="field-label">SİCİL NO</div>
+          <input type="text" id="pId" placeholder="2024001">
+        </div>
+        <div>
+          <div class="field-label">VARDİYA GRUBU</div>
+          <select id="pShift">
+            <option value="A">A — Vardiyalı (Dönüşümlü)</option>
+            <option value="B">B — Vardiyalı (Dönüşümlü)</option>
+            <option value="C">C — Vardiyalı (Dönüşümlü)</option>
+            <option value="D">D — Vardiyalı (Dönüşümlü)</option>
+            <option value="AG">A — Gündüz (Sabit 08-16)</option>
+            <option value="BG">B — Gündüz (Sabit 08-16)</option>
+            <option value="CG">C — Gündüz (Sabit 08-16)</option>
+            <option value="DG">D — Gündüz (Sabit 08-16)</option>
+            <option value="GD">Gündüz Vardiyası (Pzt-Cum 08-18)</option>
+          </select>
+        </div>
+        <div>
+          <div class="field-label">İŞLETME</div>
+          <select id="pIsletme">
+            <option value="CP11">CP11</option>
+            <option value="CP8">CP8</option>
+            <option value="CP1237">CP1237</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="addPersonnel()" style="height:42px;margin-top:18px">+ EKLE</button>
+      </div>
+    </div>
+    <div id="personnelList"><div class="empty-state">HENÜZ PERSONEL EKLENMEDİ</div></div>
+  </div>
+
+  <!-- SCHEDULE TAB -->
+  <div id="tab-schedule" class="panel">
+    <div class="panel-header">
+      <div class="panel-title">HAFTALIK ÇALIŞMA TAKVİMİ</div>
+    </div>
+    <div class="schedule-controls">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="field-label" style="margin:0;white-space:nowrap;color:var(--text2)">BAŞLANGIÇ:</div>
+        <input type="date" id="scheduleStart" style="width:155px">
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="field-label" style="margin:0;white-space:nowrap">İŞLETME:</div>
+        <select id="scheduleIsletme" style="width:120px" onchange="showSchedule()">
+          <option value="">Tümü</option>
+          <option value="CP11">CP11</option>
+          <option value="CP8">CP8</option>
+            <option value="CP1237">CP1237</option>
+        </select>
+      </div>
+      <button class="btn btn-secondary" onclick="prevWeek()">◀ ÖNCEKİ</button>
+      <button class="btn btn-primary" onclick="showSchedule()">GÖSTER</button>
+      <button class="btn btn-secondary" onclick="nextWeek()">SONRAKİ ▶</button>
+    </div>
+    <div class="shift-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div>00-08 GECE</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>16-24 AKŞAM</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>08-16 SABAH</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0d9488"></div>08-18 GÜNDÜZ VARDİYASI (Pzt-Cum)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#fcd34d;opacity:0.7"></div>08-16 GÜNDÜZ (sabit)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1e2430"></div>HAFTA TATİLİ</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div>🏖 YAZILI İZİN</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7c3aed"></div>🇹🇷 RESMİ TATİL (vardiya devam)</div>
+    </div>
+    <div class="schedule-grid-wrapper">
+      <div id="scheduleGrid"><div class="empty-state">Takvimi görmek için personel ekleyin ve tarih seçin.</div></div>
+    </div>
+  </div>
+
+</div>
+
+  <!-- ADAM/SAAT TAB -->
+  <div id="tab-adamhour" class="panel">
+    <div class="panel-header">
+      <div class="panel-title">⏱ İKİ TARİH ARASI ADAM/SAAT HESABI</div>
+    </div>
+    <div style="padding:24px;border-bottom:1px solid var(--border);display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end">
+      <div>
+        <div class="field-label">BAŞLANGIÇ TARİHİ</div>
+        <input type="date" id="ahStart" style="width:170px">
+      </div>
+      <div>
+        <div class="field-label">BİTİŞ TARİHİ</div>
+        <input type="date" id="ahEnd" style="width:170px">
+      </div>
+      <div>
+        <div class="field-label">İŞLETME</div>
+        <select id="ahIsletme" style="width:130px">
+          <option value="">Tümü</option>
+          <option value="CP11">CP11</option>
+          <option value="CP8">CP8</option>
+          <option value="CP1237">CP1237</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="calcAdamHour()">HESAPLA</button>
+    </div>
+    <div style="padding:10px 24px;background:var(--surface2);border-bottom:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:1px">
+      GECE/AKŞAM/SABAH = <span style="color:var(--accent)">7.5 saat/gün</span> &nbsp;|&nbsp;
+      GÜNDÜZ VARDİYASI 08-18 (GD) = <span style="color:var(--accent)">9 saat/gün</span> &nbsp;|&nbsp;
+      GÜNDÜZ SABİT 08-16 (xG) = <span style="color:var(--accent)">7.5 saat/gün</span> &nbsp;|&nbsp;
+      Hafta tatili ve resmi tatil günleri = <span style="color:var(--text3)">0 saat</span>
+    </div>
+    <div id="ahResults"><div class="empty-state">Tarih aralığı seçip HESAPLA butonuna basın.</div></div>
+  </div>
+
+  <!-- KIVIRCIK TAKİP TAB -->
+  <div id="tab-kivircik" class="panel">
+    <div class="panel-header" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div class="panel-title">🔩 KIVIRCIK MAKİNESİ DEĞİŞİM TAKİBİ</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-secondary" onclick="kivircikAddRow()" style="font-size:11px;padding:7px 14px">+ YENİ KAYIT</button>
+        <button class="btn btn-primary" onclick="kivircikExportExcel()" style="font-size:11px;padding:7px 14px">⬇ EXCEL'E AKTAR</button>
+      </div>
+    </div>
+
+    <!-- HAT SEÇİMİ -->
+    <div style="padding:14px 22px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:1px;margin-right:6px">HAT SEÇ:</span>
+      <button class="kiv-hat-btn active" onclick="kivircikSelectHat('ALL')" data-hat="ALL">TÜM HATLAR</button>
+      <button class="kiv-hat-btn" onclick="kivircikSelectHat('LINE-1')" data-hat="LINE-1">LINE-1 <span style="opacity:.6;font-size:10px">(MONO-1)</span></button>
+      <button class="kiv-hat-btn" onclick="kivircikSelectHat('LINE-2')" data-hat="LINE-2">LINE-2 <span style="opacity:.6;font-size:10px">(MONO-2)</span></button>
+      <button class="kiv-hat-btn" onclick="kivircikSelectHat('LINE-3')" data-hat="LINE-3">LINE-3 <span style="opacity:.6;font-size:10px">(BICO)</span></button>
+      <button class="kiv-hat-btn" onclick="kivircikSelectHat('LINE-4')" data-hat="LINE-4">LINE-4 <span style="opacity:.6;font-size:10px">(MONO-3)</span></button>
+      <button class="kiv-hat-btn" onclick="kivircikSelectHat('LINE-5')" data-hat="LINE-5">LINE-5 <span style="opacity:.6;font-size:10px">(MONO-4)</span></button>
+      <button class="kiv-hat-btn" onclick="kivircikSelectHat('LINE-6')" data-hat="LINE-6">LINE-6 <span style="opacity:.6;font-size:10px">(LOWMELT)</span></button>
+    </div>
+
+    <!-- ÖZET KARTLAR -->
+    <div id="kiv-stats-row" style="display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)"></div>
+
+    <!-- TABLO -->
+    <div style="overflow-x:auto">
+      <table class="personnel-table" id="kiv-table">
+        <thead>
+          <tr>
+            <th style="width:40px">#</th>
+            <th>HAT</th>
+            <th>KIVIRCIK NO</th>
+            <th>MONTAJ TARİHİ</th>
+            <th>SÖKÜLME TARİHİ</th>
+            <th>ÇALIŞTIĞI GÜN</th>
+            <th>PÜRÜZLÜLÜK</th>
+            <th>VARDİYADA GÖZLEMLENEN</th>
+            <th>ATÖLYEDEKİ GÖZLEM</th>
+            <th style="width:80px">İŞLEM</th>
+          </tr>
+        </thead>
+        <tbody id="kiv-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MONO KIVIRCIK SİLİNDİR ÖMRÜ TAB -->
+  <div id="tab-mono_omur" class="panel">
+    <div class="panel-header" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div class="panel-title">⚙ MONO KIVIRCIK SİLİNDİR TAKIM ÖMÜRLERİ</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-primary" onclick="monoExportExcel()" style="font-size:11px;padding:7px 14px">⬇ EXCEL'E AKTAR</button>
+      </div>
+    </div>
+
+    <!-- ÖZET KARTLAR -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)">
+      <div class="stat-card">
+        <div class="stat-value" id="mono-stat-takım">4</div>
+        <div class="stat-label">TOPLAM TAKIM</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--green)" id="mono-stat-iyi">0</div>
+        <div class="stat-label">İYİ KONDİSYON (&gt;80)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--red)" id="mono-stat-kritik">0</div>
+        <div class="stat-label">KRİTİK (&lt;=80)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--blue)" id="mono-stat-ort">0</div>
+        <div class="stat-label">ORT. TAŞLAMA ÖMRÜ</div>
+      </div>
+    </div>
+
+    <!-- TABLO -->
+    <div style="overflow-x:auto;padding:0">
+      <table class="personnel-table" id="mono-table" style="min-width:900px">
+        <thead>
+          <tr>
+            <th rowspan="2" style="vertical-align:middle;min-width:130px">TAKIM NO</th>
+            <th colspan="2" style="text-align:center;border-left:1px solid var(--border)">SİLİNDİR BOY (mm)</th>
+            <th colspan="2" style="text-align:center;border-left:1px solid var(--border)">SİLİNDİR ÇAP (mm)</th>
+            <th rowspan="2" style="vertical-align:middle;text-align:center;border-left:1px solid var(--border);min-width:140px">NOT</th>
+            <th rowspan="2" style="vertical-align:middle;text-align:center;border-left:1px solid var(--border);min-width:130px">KONDİSYON (MİNİMUM)</th>
+            <th rowspan="2" style="vertical-align:middle;text-align:center;border-left:1px solid var(--border);min-width:120px">KONDİSYON (BOY)</th>
+            <th rowspan="2" style="vertical-align:middle;text-align:center;border-left:1px solid var(--border);min-width:120px">KONDİSYON (ÇAP)</th>
+            <th rowspan="2" style="vertical-align:middle;text-align:center;border-left:1px solid var(--border);min-width:170px">ORT. KALAN TAŞLAMA ÖMRÜ</th>
+            <th rowspan="2" style="vertical-align:middle;text-align:center;border-left:1px solid var(--border);width:80px">İŞLEM</th>
+          </tr>
+          <tr>
+            <th style="text-align:center;border-left:1px solid var(--border)">ÜST</th>
+            <th style="text-align:center">ALT</th>
+            <th style="text-align:center;border-left:1px solid var(--border)">ÜST</th>
+            <th style="text-align:center">ALT</th>
+          </tr>
+        </thead>
+        <tbody id="mono-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- YENİ SATIR EKLEME FORMU -->
+    <div style="padding:16px 22px;border-top:1px solid var(--border);background:var(--surface2)">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:12px">+ YENİ TAKIM EKLE</div>
+      <div style="display:grid;grid-template-columns:150px 90px 90px 90px 90px 1fr auto;gap:8px;align-items:end">
+        <div>
+          <div class="field-label">TAKIM ADI</div>
+          <input type="text" id="mono-add-name" placeholder="Ör: 5 Nolu Takım" />
+        </div>
+        <div>
+          <div class="field-label">BOY ÜST (mm)</div>
+          <input type="number" id="mono-add-boy-ust" step="0.01" style="width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);padding:10px 8px;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none" />
+        </div>
+        <div>
+          <div class="field-label">BOY ALT (mm)</div>
+          <input type="number" id="mono-add-boy-alt" step="0.01" style="width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);padding:10px 8px;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none" />
+        </div>
+        <div>
+          <div class="field-label">ÇAP ÜST (mm)</div>
+          <input type="number" id="mono-add-cap-ust" step="0.01" style="width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);padding:10px 8px;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none" />
+        </div>
+        <div>
+          <div class="field-label">ÇAP ALT (mm)</div>
+          <input type="number" id="mono-add-cap-alt" step="0.01" style="width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);padding:10px 8px;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none" />
+        </div>
+        <div>
+          <div class="field-label">NOT</div>
+          <input type="text" id="mono-add-not" style="width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);padding:10px 8px;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none" />
+        </div>
+        <button class="btn btn-primary" onclick="monoAddRow()" style="padding:10px 16px;font-size:12px;white-space:nowrap">EKLE</button>
+      </div>
+    </div>
+
+    <div style="padding:10px 22px;background:var(--surface2);border-top:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:1px">
+      KONDİSYON (BOY) = (min(BoyÜst, BoyAlt) - 796) × 25 &nbsp;|&nbsp;
+      KONDİSYON (ÇAP) = (min(ÇapÜst, ÇapAlt) - 336) × 25 &nbsp;|&nbsp;
+      ORT. TAŞLAMA ÖMRÜ = ROUND((min(Boy) - 796) / 0.3, 0) - 1
+    </div>
+  </div>
+
+</div>
+
+<!-- KIVIRCIK EKLE/DÜZENLE MODAL -->
+<div class="modal-overlay" id="kivModal">
+  <div class="modal" style="width:560px;max-width:97vw">
+    <div class="modal-title" id="kivModalTitle">+ YENİ KIVIRCIK KAYDI</div>
+    <input type="hidden" id="kivEditIdx">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="field-group">
+        <div class="field-label">HAT</div>
+        <select id="kivHat">
+          <option value="LINE-1">LINE-1 (MONO-1)</option>
+          <option value="LINE-2">LINE-2 (MONO-2)</option>
+          <option value="LINE-3">LINE-3 (BICO)</option>
+          <option value="LINE-4">LINE-4 (MONO-3)</option>
+          <option value="LINE-5">LINE-5 (MONO-4)</option>
+          <option value="LINE-6">LINE-6 (LOWMELT)</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <div class="field-label">KIVIRCIK NO</div>
+        <input type="text" id="kivNo" placeholder="Örn: 5">
+      </div>
+      <div class="field-group">
+        <div class="field-label">MONTAJ TARİHİ</div>
+        <input type="date" id="kivMontaj">
+      </div>
+      <div class="field-group">
+        <div class="field-label">SÖKÜLME TARİHİ</div>
+        <input type="date" id="kivSokulme">
+      </div>
+      <div class="field-group">
+        <div class="field-label">PÜRÜZLÜLÜK</div>
+        <input type="text" id="kivPuruzluluk" placeholder="Değer girin">
+      </div>
+      <div class="field-group" style="grid-column:1/-1">
+        <div class="field-label">VARDİYADA GÖZLEMLENEN DEĞİŞİM NEDENİ</div>
+        <input type="text" id="kivVardiyaGoz" placeholder="Açıklama girin">
+      </div>
+      <div class="field-group" style="grid-column:1/-1">
+        <div class="field-label">KIVIRCIK ATÖLYESİNDE GÖZLEMLEME</div>
+        <input type="text" id="kivAtolyeGoz" placeholder="Açıklama girin">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeKivModal()">İPTAL</button>
+      <button class="btn btn-save" onclick="saveKivRecord()">KAYDET</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-title">✎ PERSONEL DÜZENLE</div>
+    <input type="hidden" id="editOrigId">
+    <div class="field-group">
+      <div class="field-label">AD SOYAD</div>
+      <input type="text" id="editName">
+    </div>
+    <div class="field-group">
+      <div class="field-label">SİCİL NO</div>
+      <input type="text" id="editId">
+    </div>
+    <div class="field-group">
+      <div class="field-label">VARDİYA GRUBU</div>
+      <select id="editShift">
+        <option value="A">A — Vardiyalı (Dönüşümlü)</option>
+        <option value="B">B — Vardiyalı (Dönüşümlü)</option>
+        <option value="C">C — Vardiyalı (Dönüşümlü)</option>
+        <option value="D">D — Vardiyalı (Dönüşümlü)</option>
+        <option value="AG">A — Gündüz (Sabit 08-16)</option>
+        <option value="BG">B — Gündüz (Sabit 08-16)</option>
+        <option value="CG">C — Gündüz (Sabit 08-16)</option>
+        <option value="DG">D — Gündüz (Sabit 08-16)</option>
+        <option value="GD">Gündüz Vardiyası (Pzt-Cum 08-18)</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <div class="field-label">İŞLETME</div>
+      <select id="editIsletme">
+        <option value="CP11">CP11</option>
+        <option value="CP8">CP8</option>
+            <option value="CP1237">CP1237</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeEditModal()">VAZGEÇ</button>
+      <button class="btn btn-save" onclick="saveEdit()">KAYDET</button>
+    </div>
+  </div>
+</div>
+
+<!-- LEAVE MODAL -->
+<div class="modal-overlay" id="leaveModal">
+  <div class="modal" style="width:520px">
+    <div class="modal-title">📅 İZİN YAZ</div>
+    <div id="leavePersonnelInfo" style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);margin-bottom:18px;padding:10px 14px;background:var(--surface2);border:1px solid var(--border)"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div class="field-group" style="margin:0">
+        <div class="field-label">BAŞLANGIÇ TARİHİ</div>
+        <input type="date" id="leaveStart">
+      </div>
+      <div class="field-group" style="margin:0">
+        <div class="field-label">BİTİŞ TARİHİ</div>
+        <input type="date" id="leaveEnd">
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">AÇIKLAMA (OPSİYONEL)</div>
+      <input type="text" id="leaveNote" placeholder="Yıllık izin, mazeret izni...">
+    </div>
+    <button class="btn btn-primary" style="width:100%;margin-bottom:16px" onclick="addLeave()">+ İZİN EKLE</button>
+
+    <!-- Mevcut izinler listesi -->
+    <div id="leaveList" style="max-height:220px;overflow-y:auto;border:1px solid var(--border)"></div>
+
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="btn btn-secondary" onclick="closeLeaveModal()">KAPAT</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// VARDİYA HESAPLAMA
+//
+// Kaynak: vardiya_birebir_hesap.xlsx (2026 yılı verileri)
+//
+// Döngü = 24 gün (3 blok x 8 gün)
+//   Blok 0 (pos 0-7):  6 gün GECE  (00-08) + 2 gün tatil
+//   Blok 1 (pos 8-15): 6 gün AKŞAM (16-24) + 2 gün tatil
+//   Blok 2 (pos 16-23):6 gün SABAH (08-16) + 2 gün tatil
+//
+// Referans: 10 Mart 2026 (Salı)
+//   A → pos 0  (Gece bloğu, gün 1/6)  → 16-17 Mart tatil ✓
+//   B → pos 6  (Gece bloğu, tatil 1)  → 10-11 Mart tatil ✓
+//   C → pos 12 (Akşam bloğu, gün 5/6) → 12-13 Mart tatil ✓
+//   D → pos 18 (Sabah bloğu, gün 3/6) → 14-15 Mart tatil ✓
+//
+// Excel'den alınan HT (Hafta Tatili) günleri — çakışma kontrolü için:
+// ============================================================
+
+const TIME_SLOTS = [
+  { id: 'G', label: '00:00 - 08:00', start: 0,  end: 8,  cssClass: 'sch-work-24', color: '#10b981', shortLabel: 'GECE'  },
+  { id: 'A', label: '16:00 - 24:00', start: 16, end: 24, cssClass: 'sch-work-16', color: '#3b82f6', shortLabel: 'AKŞAM' },
+  { id: 'S', label: '08:00 - 16:00', start: 8,  end: 16, cssClass: 'sch-work-08', color: '#f59e0b', shortLabel: 'SABAH' },
+];
+const SLOT_BY_ID = { G: TIME_SLOTS[0], S: TIME_SLOTS[2], A: TIME_SLOTS[1] };
+
+// Excel'den alınan HT günleri (2026 yılı - vardiya_birebir_hesap.xlsx)
+const EXCEL_HT = {
+  A: new Set(["2026-01-03","2026-01-04","2026-01-11","2026-01-12","2026-01-19","2026-01-20","2026-01-27","2026-01-28","2026-02-04","2026-02-05","2026-02-12","2026-02-13","2026-02-20","2026-02-21","2026-02-28","2026-03-01","2026-03-08","2026-03-09","2026-03-16","2026-03-17","2026-03-24","2026-03-25","2026-04-01","2026-04-02","2026-04-09","2026-04-10","2026-04-17","2026-04-18","2026-04-25","2026-04-26","2026-05-03","2026-05-04","2026-05-11","2026-05-12","2026-05-19","2026-05-20","2026-05-27","2026-05-28","2026-06-04","2026-06-05","2026-06-12","2026-06-13","2026-06-20","2026-06-21","2026-06-28","2026-06-29","2026-07-06","2026-07-07","2026-07-14","2026-07-15","2026-07-22","2026-07-23","2026-07-30","2026-07-31","2026-08-07","2026-08-08","2026-08-15","2026-08-16","2026-08-23","2026-08-24","2026-08-31","2026-09-01","2026-09-08","2026-09-09","2026-09-16","2026-09-17","2026-09-24","2026-09-25","2026-10-02","2026-10-03","2026-10-10","2026-10-11","2026-10-18","2026-10-19","2026-10-26","2026-10-27","2026-11-03","2026-11-04","2026-11-11","2026-11-12","2026-11-19","2026-11-20","2026-11-27","2026-11-28","2026-12-05","2026-12-06","2026-12-13","2026-12-14","2026-12-21","2026-12-22","2026-12-29","2026-12-30"]),
+  B: new Set(["2026-01-05","2026-01-06","2026-01-13","2026-01-14","2026-01-21","2026-01-22","2026-01-29","2026-01-30","2026-02-06","2026-02-07","2026-02-14","2026-02-15","2026-02-22","2026-02-23","2026-03-02","2026-03-03","2026-03-10","2026-03-11","2026-03-18","2026-03-19","2026-03-26","2026-03-27","2026-04-03","2026-04-04","2026-04-11","2026-04-12","2026-04-19","2026-04-20","2026-04-27","2026-04-28","2026-05-05","2026-05-06","2026-05-13","2026-05-14","2026-05-21","2026-05-22","2026-05-29","2026-05-30","2026-06-06","2026-06-07","2026-06-14","2026-06-15","2026-06-22","2026-06-23","2026-06-30","2026-07-01","2026-07-08","2026-07-09","2026-07-16","2026-07-17","2026-07-24","2026-07-25","2026-08-01","2026-08-02","2026-08-09","2026-08-10","2026-08-17","2026-08-18","2026-08-25","2026-08-26","2026-09-02","2026-09-03","2026-09-10","2026-09-11","2026-09-18","2026-09-19","2026-09-26","2026-09-27","2026-10-04","2026-10-05","2026-10-12","2026-10-13","2026-10-20","2026-10-21","2026-10-28","2026-10-29","2026-11-05","2026-11-06","2026-11-13","2026-11-14","2026-11-21","2026-11-22","2026-11-29","2026-11-30","2026-12-07","2026-12-08","2026-12-15","2026-12-16","2026-12-23","2026-12-24","2026-12-31"]),
+  C: new Set(["2026-01-07","2026-01-08","2026-01-15","2026-01-16","2026-01-23","2026-01-24","2026-01-31","2026-02-01","2026-02-08","2026-02-09","2026-02-16","2026-02-17","2026-02-24","2026-02-25","2026-03-04","2026-03-05","2026-03-12","2026-03-13","2026-03-20","2026-03-21","2026-03-28","2026-03-29","2026-04-05","2026-04-06","2026-04-13","2026-04-14","2026-04-21","2026-04-22","2026-04-29","2026-04-30","2026-05-07","2026-05-08","2026-05-15","2026-05-16","2026-05-23","2026-05-24","2026-05-31","2026-06-01","2026-06-08","2026-06-09","2026-06-16","2026-06-17","2026-06-24","2026-06-25","2026-07-02","2026-07-03","2026-07-10","2026-07-11","2026-07-18","2026-07-19","2026-07-26","2026-07-27","2026-08-03","2026-08-04","2026-08-11","2026-08-12","2026-08-19","2026-08-20","2026-08-27","2026-08-28","2026-09-04","2026-09-05","2026-09-12","2026-09-13","2026-09-20","2026-09-21","2026-09-28","2026-09-29","2026-10-06","2026-10-07","2026-10-14","2026-10-15","2026-10-22","2026-10-23","2026-10-30","2026-10-31","2026-11-07","2026-11-08","2026-11-15","2026-11-16","2026-11-23","2026-11-24","2026-12-01","2026-12-02","2026-12-09","2026-12-10","2026-12-17","2026-12-18","2026-12-25","2026-12-26"]),
+  D: new Set(["2026-01-01","2026-01-02","2026-01-09","2026-01-10","2026-01-17","2026-01-18","2026-01-25","2026-01-26","2026-02-02","2026-02-03","2026-02-10","2026-02-11","2026-02-18","2026-02-19","2026-02-26","2026-02-27","2026-03-06","2026-03-07","2026-03-14","2026-03-15","2026-03-22","2026-03-23","2026-03-30","2026-03-31","2026-04-07","2026-04-08","2026-04-15","2026-04-16","2026-04-23","2026-04-24","2026-05-01","2026-05-02","2026-05-09","2026-05-10","2026-05-17","2026-05-18","2026-05-25","2026-05-26","2026-06-02","2026-06-03","2026-06-10","2026-06-11","2026-06-18","2026-06-19","2026-06-26","2026-06-27","2026-07-04","2026-07-05","2026-07-12","2026-07-13","2026-07-20","2026-07-21","2026-07-28","2026-07-29","2026-08-05","2026-08-06","2026-08-13","2026-08-14","2026-08-21","2026-08-22","2026-08-29","2026-08-30","2026-09-06","2026-09-07","2026-09-14","2026-09-15","2026-09-22","2026-09-23","2026-09-30","2026-10-01","2026-10-08","2026-10-09","2026-10-16","2026-10-17","2026-10-24","2026-10-25","2026-11-01","2026-11-02","2026-11-09","2026-11-10","2026-11-17","2026-11-18","2026-11-25","2026-11-26","2026-12-03","2026-12-04","2026-12-11","2026-12-12","2026-12-19","2026-12-20","2026-12-27","2026-12-28"])
+};
+
+function dateKey(date) {
+  return date.getFullYear() + '-' +
+    String(date.getMonth()+1).padStart(2,'0') + '-' +
+    String(date.getDate()).padStart(2,'0');
+}
+
+// ============================================================
+// TÜRKİYE RESMİ TATİLLERİ
+// Sabit tarihler her yıl tekrarlanır; değişken tarihler (Ramazan, Kurban)
+// 2025 ve 2026 için manuel girilmiştir.
+// ============================================================
+const RESMI_TATILLER = {
+  // Sabit tarihler (MM-DD formatı, her yıl geçerli)
+  fixed: [
+    { key: '01-01', ad: 'Yılbaşı' },
+    { key: '04-23', ad: '23 Nisan Ulusal Egemenlik ve Çocuk Bayramı' },
+    { key: '05-01', ad: '1 Mayıs Emek ve Dayanışma Günü' },
+    { key: '05-19', ad: '19 Mayıs Atatürk\'ü Anma, Gençlik ve Spor Bayramı' },
+    { key: '07-15', ad: '15 Temmuz Demokrasi ve Millî Birlik Günü' },
+    { key: '08-30', ad: '30 Ağustos Zafer Bayramı' },
+    { key: '10-29', ad: '29 Ekim Cumhuriyet Bayramı' },
+  ],
+  // Değişken tarihler (tam tarih YYYY-MM-DD)
+  variable: [
+    // Ramazan Bayramı 2025 (30 Mar - 1 Nis)
+    { date: '2025-03-30', ad: 'Ramazan Bayramı 1. Günü' },
+    { date: '2025-03-31', ad: 'Ramazan Bayramı 2. Günü' },
+    { date: '2025-04-01', ad: 'Ramazan Bayramı 3. Günü' },
+    // Kurban Bayramı 2025 (5-9 Haz)
+    { date: '2025-06-05', ad: 'Kurban Bayramı Arifesi' },
+    { date: '2025-06-06', ad: 'Kurban Bayramı 1. Günü' },
+    { date: '2025-06-07', ad: 'Kurban Bayramı 2. Günü' },
+    { date: '2025-06-08', ad: 'Kurban Bayramı 3. Günü' },
+    { date: '2025-06-09', ad: 'Kurban Bayramı 4. Günü' },
+    // Ramazan Bayramı 2026 (19-21 Mar)
+    { date: '2026-03-19', ad: 'Ramazan Bayramı 1. Günü' },
+    { date: '2026-03-20', ad: 'Ramazan Bayramı 2. Günü' },
+    { date: '2026-03-21', ad: 'Ramazan Bayramı 3. Günü' },
+    // Kurban Bayramı 2026 (26-30 May)
+    { date: '2026-05-26', ad: 'Kurban Bayramı Arifesi' },
+    { date: '2026-05-27', ad: 'Kurban Bayramı 1. Günü' },
+    { date: '2026-05-28', ad: 'Kurban Bayramı 2. Günü' },
+    { date: '2026-05-29', ad: 'Kurban Bayramı 3. Günü' },
+    { date: '2026-05-30', ad: 'Kurban Bayramı 4. Günü' },
+  ]
+};
+
+function getResmiTatil(date) {
+  const key = dateKey(date);
+  const mmdd = key.slice(5); // MM-DD
+  const fixed = RESMI_TATILLER.fixed.find(t => t.key === mmdd);
+  if (fixed) return fixed.ad;
+  const variable = RESMI_TATILLER.variable.find(t => t.date === key);
+  if (variable) return variable.ad;
+  return null;
+}
+
+const REFERENCE_DATE = new Date(2026, 2, 10); // 10 Mart 2026
+const SHIFT_REF_POS  = { A: 0, B: 6, C: 12, D: 18 };
+
+function daysSinceRef(date) {
+  const a = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const b = new Date(REFERENCE_DATE.getFullYear(), REFERENCE_DATE.getMonth(), REFERENCE_DATE.getDate());
+  return Math.round((a - b) / 86400000);
+}
+
+function getShiftStatus(group, date) {
+  const key = dateKey(date);
+  // 2026 yılında Excel verisini kullan
+  if (date.getFullYear() === 2026 && EXCEL_HT[group]) {
+    if (EXCEL_HT[group].has(key)) {
+      return { working: false, isRest: true, timeSlot: null, dayInCycle: 0 };
+    }
+    // Çalışıyor — döngüden hangi vardiyanın olduğunu hesapla
+    const days  = daysSinceRef(date);
+    const refPos = SHIFT_REF_POS[group];
+    const pos   = ((refPos + days) % 24 + 24) % 24;
+    const block = Math.floor(pos / 8);
+    return { working: true, isRest: false, timeSlot: TIME_SLOTS[block], dayInCycle: (pos % 8) + 1 };
+  }
+  // 2026 dışı yıllar için döngü hesabı
+  const days  = daysSinceRef(date);
+  const refPos = SHIFT_REF_POS[group];
+  const pos   = ((refPos + days) % 24 + 24) % 24;
+  const block = Math.floor(pos / 8);
+  const dayInBlock = pos % 8;
+  if (dayInBlock >= 6) return { working: false, isRest: true, timeSlot: null, dayInCycle: dayInBlock+1 };
+  return { working: true, isRest: false, timeSlot: TIME_SLOTS[block], dayInCycle: dayInBlock+1 };
+}
+
+function getCurrentSlotId() {
+  const h = new Date().getHours();
+  if (h >= 8  && h < 16) return 'S';
+  if (h >= 16)            return 'A';
+  return 'G';
+}
+
+// Bir personelin verilen tarih+slotta çalışıp çalışmadığı
+function isWorking(p, date, slotId) {
+  // Önce izin kontrolü
+  if (isOnLeave(p, date)) return { working: false, status: { isRest: false, isLeave: true, timeSlot: null, dayInCycle: 0 } };
+
+  // Gündüz Vardiyası: Pzt-Cum 08:00-18:00, Cmt-Paz tatil
+  if (p.shift === 'GD') {
+    const dow = date.getDay();
+    const isWeekend = dow === 0 || dow === 6;
+    if (isWeekend) return { working: false, status: { isRest: true, isLeave: false, timeSlot: null, dayInCycle: 0 } };
+    // Resmi tatilde GD izinli
+    if (getResmiTatil(date)) return { working: false, status: { isRest: false, isLeave: false, isResmiTatil: true, timeSlot: null, dayInCycle: 0 } };
+    if (slotId === 'S') return { working: true, status: { isRest: false, isLeave: false, isGD: true, timeSlot: TIME_SLOTS[2], dayInCycle: 0 } };
+    return { working: false, status: { isRest: false, isLeave: false, timeSlot: null, dayInCycle: 0 } };
+  }
+
+  const isGunduz  = p.shift.endsWith('G');
+  const baseGroup = p.shift.replace('G','');
+  const status    = getShiftStatus(baseGroup, date);
+
+  if (!status.working) return { working: false, status };
+
+  if (isGunduz) {
+    // Resmi tatilde Gündüz (sabit) izinli
+    if (getResmiTatil(date)) return { working: false, status: { ...status, isRest: false, isLeave: false, isResmiTatil: true } };
+    return { working: slotId === 'S', status: { ...status, isGunduz: true } };
+  }
+  return { working: status.timeSlot.id === slotId, status };
+}
+
+// ============================================================
+// VERİ — Google Sheets
+// ============================================================
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxNr_f20VA23-xm9c2lCEVBpLbrpEVf1tFQuV3-S43-be6TbuBwfRyF3GOmbwGklddb/exec';
+let personnel = [];
+
+function showSyncStatus(msg, isError) {
+  let el = document.getElementById('syncStatus');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'syncStatus';
+    el.style.cssText = 'position:fixed;bottom:18px;right:18px;padding:8px 16px;border-radius:8px;font-family:"Share Tech Mono",monospace;font-size:12px;z-index:9999;transition:opacity 0.5s';
+    document.body.appendChild(el);
+  }
+  el.style.background = isError ? '#ef4444' : '#22c55e';
+  el.style.color = '#fff';
+  el.style.opacity = '1';
+  el.textContent = msg;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.style.opacity = '0'; }, 2800);
+}
+
+async function sheetsPost(payload) {
+  const resp = await fetch(SHEETS_URL, { method: 'POST', body: JSON.stringify(payload) });
+  return resp.json();
+}
+
+function shiftLabel(s) {
+  if (s === 'GD') return 'GD';
+  return s.length === 2 && s.endsWith('G') ? s[0]+'G' : s;
+}
+function shiftFullLabel(s) {
+  const m = {A:'A Vardiyalı',B:'B Vardiyalı',C:'C Vardiyalı',D:'D Vardiyalı',AG:'A Gündüz',BG:'B Gündüz',CG:'C Gündüz',DG:'D Gündüz',GD:'Gündüz Vardiyası'};
+  return m[s]||s;
+}
+
+async function addPersonnel() {
+  const name    = document.getElementById('pName').value.trim();
+  const id      = document.getElementById('pId').value.trim();
+  const shift   = document.getElementById('pShift').value;
+  const isletme = document.getElementById('pIsletme').value;
+  if (!name || !id) { alert('Ad soyad ve sicil numarası zorunludur!'); return; }
+  if (personnel.find(p => p.id === id)) { alert('Bu sicil numarası zaten kayıtlı!'); return; }
+  const newP = { name, id, shift, isletme, leaves: [], createdAt: new Date().toISOString() };
+  personnel.push(newP);
+  document.getElementById('pName').value = '';
+  document.getElementById('pId').value   = '';
+  renderPersonnelList(); updateStats();
+  try { await sheetsPost({ action: 'add', data: newP }); showSyncStatus('✓ Personel eklendi', false); }
+  catch(e) { showSyncStatus('KAYIT HATASI!', true); }
+}
+
+async function removePersonnel(id) {
+  if (!confirm('Bu personeli silmek istediğinizden emin misiniz?')) return;
+  personnel = personnel.filter(p => p.id !== id);
+  renderPersonnelList(); updateStats();
+  try { await sheetsPost({ action: 'delete', id }); showSyncStatus('✓ Personel silindi', false); }
+  catch(e) { showSyncStatus('SİLME HATASI!', true); }
+}
+
+function openEditModal(id) {
+  const p = personnel.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('editOrigId').value   = p.id;
+  document.getElementById('editName').value     = p.name;
+  document.getElementById('editId').value       = p.id;
+  document.getElementById('editShift').value    = p.shift;
+  document.getElementById('editIsletme').value  = p.isletme || 'CP11';
+  document.getElementById('editModal').classList.add('open');
+}
+function closeEditModal() { document.getElementById('editModal').classList.remove('open'); }
+async function saveEdit() {
+  const origId  = document.getElementById('editOrigId').value;
+  const name    = document.getElementById('editName').value.trim();
+  const id      = document.getElementById('editId').value.trim();
+  const shift   = document.getElementById('editShift').value;
+  const isletme = document.getElementById('editIsletme').value;
+  if (!name || !id) { alert('Ad soyad ve sicil no zorunludur!'); return; }
+  if (id !== origId && personnel.find(p => p.id === id)) { alert('Bu sicil numarası başka bir personelde kayıtlı!'); return; }
+  const idx = personnel.findIndex(p => p.id === origId);
+  if (idx === -1) { alert('Personel bulunamadı!'); return; }
+  // leaves ve createdAt koru
+  const leaves    = personnel[idx].leaves    || [];
+  const createdAt = personnel[idx].createdAt || new Date().toISOString();
+  personnel[idx] = { id, name, shift, isletme, leaves, createdAt };
+  closeEditModal(); renderPersonnelList(); updateStats();
+  try { await sheetsPost({ action: 'update', origId, data: personnel[idx] }); showSyncStatus('✓ Güncellendi', false); }
+  catch(e) { showSyncStatus('GÜNCELLEME HATASI!', true); }
+}
+
+function renderPersonnelList() {
+  const c = document.getElementById('personnelList');
+  if (!personnel.length) { c.innerHTML = '<div class="empty-state">HENÜZ PERSONEL EKLENMEDİ</div>'; return; }
+  const searchEl = document.getElementById('personnelSearch');
+  const searchTerm = searchEl ? searchEl.value.trim().toLowerCase() : '';
+  let sorted = [...personnel].sort((a,b) => (a.isletme||'').localeCompare(b.isletme||'') || a.shift.localeCompare(b.shift) || a.name.localeCompare(b.name));
+  if (searchTerm) {
+    sorted = sorted.filter(p =>
+      p.name.toLowerCase().includes(searchTerm) ||
+      p.id.toLowerCase().includes(searchTerm)
+    );
+  }
+  if (!sorted.length) { c.innerHTML = '<div class="no-results">Arama sonucu bulunamadı.</div>'; return; }
+  let html = `<table class="personnel-table"><thead><tr>
+    <th>VARDİYA</th><th>AD SOYAD</th><th>SİCİL NO</th><th>İŞLETME</th><th>KAYIT TARİHİ</th><th style="width:200px"></th>
+  </tr></thead><tbody>`;
+  sorted.forEach(p => {
+    const d  = new Date(p.createdAt);
+    const ds = `${d.getDate().toString().padStart(2,'0')}.${(d.getMonth()+1).toString().padStart(2,'0')}.${d.getFullYear()}`;
+    const leaveCount = (p.leaves||[]).length;
+    html += `<tr>
+      <td style="white-space:nowrap">
+        <span class="shift-block shift-${p.shift}">${shiftLabel(p.shift)}</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text3);margin-left:6px">${shiftFullLabel(p.shift)}</span>
+      </td>
+      <td style="font-weight:600">${p.name}</td>
+      <td style="font-family:'Share Tech Mono',monospace;color:var(--text)">${p.id}</td>
+      <td><span class="isletme-badge">${p.isletme||'—'}</span></td>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text3)">${ds}</td>
+      <td>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn btn-leave" onclick="openLeaveModal('${p.id}')">İZİN YAZ${leaveCount ? ' (' + leaveCount + ')' : ''}</button>
+          <button class="btn btn-edit" onclick="openEditModal('${p.id}')">DÜZENLE</button>
+          <button class="btn btn-danger" onclick="removePersonnel('${p.id}')">SİL</button>
+        </div>
+      </td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  c.innerHTML = html;
+}
+
+// ============================================================
+// İZİN YÖNETİMİ
+// ============================================================
+let leaveTargetId = null;
+
+function openLeaveModal(id) {
+  leaveTargetId = id;
+  const p = personnel.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('leavePersonnelInfo').innerHTML =
+    `<span style="color:var(--accent);font-weight:bold">${p.name}</span> &nbsp;|&nbsp; SİCİL: ${p.id} &nbsp;|&nbsp; <span class="isletme-badge">${p.isletme||'—'}</span>`;
+  const now = new Date().toISOString().split('T')[0];
+  document.getElementById('leaveStart').value = now;
+  document.getElementById('leaveEnd').value   = now;
+  document.getElementById('leaveNote').value  = '';
+  renderLeaveList(p);
+  document.getElementById('leaveModal').classList.add('open');
+}
+function closeLeaveModal() {
+  document.getElementById('leaveModal').classList.remove('open');
+  leaveTargetId = null;
+}
+
+async function addLeave() {
+  const p = personnel.find(x => x.id === leaveTargetId);
+  if (!p) return;
+  const start = document.getElementById('leaveStart').value;
+  const end   = document.getElementById('leaveEnd').value;
+  const note  = document.getElementById('leaveNote').value.trim();
+  if (!start || !end) { alert('Başlangıç ve bitiş tarihi seçiniz!'); return; }
+  if (end < start) { alert('Bitiş tarihi başlangıç tarihinden önce olamaz!'); return; }
+  if (!p.leaves) p.leaves = [];
+  const leaveId = Date.now().toString();
+  p.leaves.push({ start, end, note, id: leaveId });
+  p.leaves.sort((a,b) => a.start.localeCompare(b.start));
+  renderLeaveList(p); renderPersonnelList();
+  document.getElementById('leaveNote').value = '';
+  try {
+    await sheetsPost({ action: 'saveLeaves', id: p.id, leaves: p.leaves });
+    await sheetsPost({ action: 'addLeaveRow', row: {
+      leaveId, personnelId: p.id, personnelName: p.name,
+      isletme: p.isletme||'', shift: p.shift,
+      start, end, note, addedAt: new Date().toISOString()
+    }});
+    showSyncStatus('✓ İzin kaydedildi', false);
+  } catch(e) { showSyncStatus('İZİN KAYIT HATASI!', true); }
+}
+
+async function removeLeave(personnelId, leaveId) {
+  const p = personnel.find(x => x.id === personnelId);
+  if (!p || !p.leaves) return;
+  p.leaves = p.leaves.filter(l => l.id !== leaveId);
+  renderLeaveList(p); renderPersonnelList();
+  try {
+    await sheetsPost({ action: 'saveLeaves', id: p.id, leaves: p.leaves });
+    await sheetsPost({ action: 'deleteLeaveRow', leaveId });
+    showSyncStatus('✓ İzin silindi', false);
+  } catch(e) { showSyncStatus('İZİN SİLME HATASI!', true); }
+}
+
+function renderLeaveList(p) {
+  const c = document.getElementById('leaveList');
+  if (!p.leaves || !p.leaves.length) {
+    c.innerHTML = '<div style="padding:16px;text-align:center;font-family:\'Share Tech Mono\',monospace;font-size:11px;color:var(--text3)">Kayıtlı izin yok</div>';
+    return;
+  }
+  let html = '';
+  p.leaves.forEach(l => {
+    const s = l.start.split('-').reverse().join('.');
+    const e = l.end.split('-').reverse().join('.');
+    const same = l.start === l.end;
+    html += `<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border)">
+      <div style="flex:1;min-width:0">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--accent)">${same ? s : s+' → '+e}</div>
+        ${l.note ? `<div style="font-size:12px;color:var(--text3);margin-top:2px">${l.note}</div>` : ''}
+      </div>
+      <button class="btn btn-danger" style="padding:4px 8px;font-size:10px" onclick="removeLeave('${p.id}','${l.id}')">SİL</button>
+    </div>`;
+  });
+  c.innerHTML = html;
+}
+
+// İzin kontrolü: belirtilen tarih bir izin aralığında mı?
+function isOnLeave(p, date) {
+  if (!p.leaves || !p.leaves.length) return false;
+  const ds = date.toISOString().split('T')[0];
+  return p.leaves.some(l => ds >= l.start && ds <= l.end);
+}
+
+
+function queryNow() {
+  const now = new Date();
+  document.getElementById('queryDate').value  = now.toISOString().split('T')[0];
+  document.getElementById('querySlot').value  = getCurrentSlotId();
+  runQuery(now, getCurrentSlotId());
+}
+
+function querySelected() {
+  const ds = document.getElementById('queryDate').value;
+  const sl = document.getElementById('querySlot').value;
+  if (!ds) { alert('Lütfen tarih seçin!'); return; }
+  const [y,mo,d] = ds.split('-').map(Number);
+  runQuery(new Date(y, mo-1, d), sl);
+}
+
+function runQuery(date, slotId) {
+  if (!personnel.length) {
+    document.getElementById('queryResults').innerHTML = '<div class="no-results">Önce personel ekleyin.</div>';
+    document.getElementById('fullResults').innerHTML = ''; return;
+  }
+  const checkedIsletme = ['CP11','CP8','CP1237'].filter(v => document.getElementById('filter'+v)?.checked);
+  // hiç seçilmemişse tümünü göster
+  const isletmeFilters = checkedIsletme.length ? checkedIsletme : null;
+  const slot = SLOT_BY_ID[slotId];
+  const DAYS   = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+  const MONTHS = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+
+  document.getElementById('queryInfo').innerHTML = `
+    <span style="color:var(--text2)">${DAYS[date.getDay()]}, ${date.getDate()} ${MONTHS[date.getMonth()]} ${date.getFullYear()}</span><br>
+    Vardiya: <span style="color:${slot.color};font-weight:bold">${slot.label} — ${slot.shortLabel}</span>
+    ${isletmeFilters ? `&nbsp;|&nbsp; İşletme: <span style="color:var(--blue)">${isletmeFilters.join(', ')}</span>` : ''}
+    ${getResmiTatil(date) ? `<br><span style="color:#c084fc;font-weight:bold">🇹🇷 RESMİ TATİL: ${getResmiTatil(date)}</span>` : ''}
+  `;
+
+  const workers = [], leaveList = [], restList = [], resmiTatilList = [], otherList = [];
+  personnel.forEach(p => {
+    if (isletmeFilters && !isletmeFilters.includes(p.isletme)) return;
+    const res = isWorking(p, date, slotId);
+    if (res.working) {
+      workers.push({ ...p, wStatus: res.status });
+    } else if (res.status.isLeave) {
+      leaveList.push({ ...p, wStatus: res.status });
+    } else if (res.status.isResmiTatil) {
+      resmiTatilList.push({ ...p, wStatus: res.status });
+    } else if (res.status.isRest) {
+      restList.push({ ...p, wStatus: res.status });
+    } else {
+      otherList.push({ ...p, wStatus: res.status });
+    }
+  });
+
+  const totalOff = leaveList.length + restList.length + resmiTatilList.length + otherList.length;
+
+  document.getElementById('queryResults').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px">
+      <div style="text-align:center;padding:14px;background:var(--bg);border:1px solid var(--border2)">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:var(--green)">${workers.length}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);margin-top:4px">ÇALIŞAN</div>
+      </div>
+      <div style="text-align:center;padding:14px;background:var(--bg);border:1px solid #7c2d12">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:#f97316">${leaveList.length}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);margin-top:4px">YAZILI İZİN</div>
+      </div>
+      <div style="text-align:center;padding:14px;background:var(--bg);border:1px solid #4c1d95">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:#c084fc">${resmiTatilList.length}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);margin-top:4px">🇹🇷 RESMİ TATİL</div>
+      </div>
+      <div style="text-align:center;padding:14px;background:var(--bg);border:1px solid var(--border2)">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:var(--text3)">${restList.length}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);margin-top:4px">HAFTA TATİLİ</div>
+      </div>
+      <div style="text-align:center;padding:14px;background:var(--bg);border:1px solid var(--border2)">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:var(--text3)">${otherList.length}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);margin-top:4px">FARKLI VARDİYA</div>
+      </div>
+    </div>`;
+
+  let fh = '';
+
+  // Çalışanlar
+  fh += `<div class="time-slot">
+    <div class="time-slot-header">
+      <span class="time-badge active-slot">${slot.label}</span>
+      <span class="slot-label active-label">${slot.shortLabel} VARDİYASINDA ÇALIŞANLAR</span>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text3);margin-left:auto">${workers.length} KİŞİ</span>
+    </div>`;
+  if (workers.length) {
+    fh += '<div class="personnel-grid">';
+    workers.forEach(w => {
+      const isG  = w.shift.endsWith('G') && w.shift !== 'GD';
+      const isGDw = w.shift === 'GD';
+      const info = isGDw ? 'GÜNDÜZ VARDİYASI 08-18' : isG ? 'GÜNDÜZ-SABİT' : `GÜN ${w.wStatus.dayInCycle}/6`;
+      fh += `<div class="personnel-card">
+        <div class="status-dot status-working"></div>
+        <span class="shift-block shift-${w.shift}">${shiftLabel(w.shift)}</span>
+        <div class="personnel-info">
+          <div class="personnel-name">${w.name}</div>
+          <div class="personnel-id">SİCİL: ${w.id} &nbsp;•&nbsp; <span class="isletme-badge">${w.isletme||'—'}</span> &nbsp;•&nbsp; ${info}</div>
+        </div>
+      </div>`;
+    });
+    fh += '</div>';
+  } else {
+    fh += '<div class="no-results">Bu vardiyada çalışan personel yok.</div>';
+  }
+  fh += '</div>';
+
+  // İzinliler
+  if (leaveList.length) {
+    fh += `<div class="time-slot">
+      <div class="time-slot-header">
+        <span class="time-badge" style="background:#7c2d12;border-color:#f97316;color:#fed7aa">🏖 İZİN</span>
+        <span class="slot-label" style="color:#f97316">YAZILI İZİNDE OLAN PERSONEL</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text3);margin-left:auto">${leaveList.length} KİŞİ</span>
+      </div>
+      <div class="personnel-grid">`;
+    leaveList.forEach(w => {
+      fh += `<div class="personnel-card" style="opacity:0.75;border-left:3px solid #f97316">
+        <div class="status-dot" style="background:#f97316"></div>
+        <span class="shift-block shift-${w.shift}">${shiftLabel(w.shift)}</span>
+        <div class="personnel-info">
+          <div class="personnel-name">${w.name}</div>
+          <div class="personnel-id">SİCİL: ${w.id} &nbsp;•&nbsp; ${w.isletme||'—'} &nbsp;•&nbsp; 🏖 İZİNDE</div>
+        </div>
+      </div>`;
+    });
+    fh += '</div></div>';
+  }
+
+  // Resmi tatil izinliler (GD ve Gündüz sabit)
+  if (resmiTatilList.length) {
+    const tatilAdi = getResmiTatil(date) || 'Resmi Tatil';
+    fh += `<div class="time-slot">
+      <div class="time-slot-header">
+        <span class="time-badge" style="background:#2e1065;border-color:#7c3aed;color:#e9d5ff">🇹🇷 RESMİ TATİL</span>
+        <span class="slot-label" style="color:#c084fc">RESMİ TATİLDE OLAN PERSONEL — ${tatilAdi}</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text3);margin-left:auto">${resmiTatilList.length} KİŞİ</span>
+      </div>
+      <div class="personnel-grid">`;
+    resmiTatilList.forEach(w => {
+      fh += `<div class="personnel-card" style="opacity:0.7;border-left:3px solid #7c3aed">
+        <div class="status-dot" style="background:#c084fc"></div>
+        <span class="shift-block shift-${w.shift}">${shiftLabel(w.shift)}</span>
+        <div class="personnel-info">
+          <div class="personnel-name">${w.name}</div>
+          <div class="personnel-id">SİCİL: ${w.id} &nbsp;•&nbsp; ${w.isletme||'—'} &nbsp;•&nbsp; 🇹🇷 RESMİ TATİL</div>
+        </div>
+      </div>`;
+    });
+    fh += '</div></div>';
+  }
+
+  // Hafta tatilindekiler
+  if (restList.length) {
+    fh += `<div class="time-slot">
+      <div class="time-slot-header">
+        <span class="time-badge inactive-slot">TATİL</span>
+        <span class="slot-label inactive-label">HAFTA TATİLİNDE OLAN PERSONEL</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text3);margin-left:auto">${restList.length} KİŞİ</span>
+      </div>
+      <div class="personnel-grid">`;
+    restList.forEach(w => {
+      fh += `<div class="personnel-card" style="opacity:0.35">
+        <div class="status-dot status-off"></div>
+        <span class="shift-block shift-${w.shift}">${shiftLabel(w.shift)}</span>
+        <div class="personnel-info">
+          <div class="personnel-name">${w.name}</div>
+          <div class="personnel-id">SİCİL: ${w.id} &nbsp;•&nbsp; ${w.isletme||'—'} &nbsp;•&nbsp; HAFTA TATİLİ</div>
+        </div>
+      </div>`;
+    });
+    fh += '</div></div>';
+  }
+
+  // Farklı vardiyada olanlar
+  if (otherList.length) {
+    fh += `<div class="time-slot">
+      <div class="time-slot-header">
+        <span class="time-badge inactive-slot">DİĞER VARDİYA</span>
+        <span class="slot-label inactive-label">FARKLI VARDİYADA ÇALIŞAN PERSONEL</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text3);margin-left:auto">${otherList.length} KİŞİ</span>
+      </div>
+      <div class="personnel-grid">`;
+    otherList.forEach(w => {
+      fh += `<div class="personnel-card" style="opacity:0.35">
+        <div class="status-dot status-off"></div>
+        <span class="shift-block shift-${w.shift}">${shiftLabel(w.shift)}</span>
+        <div class="personnel-info">
+          <div class="personnel-name">${w.name}</div>
+          <div class="personnel-id">SİCİL: ${w.id} &nbsp;•&nbsp; ${w.isletme||'—'} &nbsp;•&nbsp; FARKLI VARDİYA</div>
+        </div>
+      </div>`;
+    });
+    fh += '</div></div>';
+  }
+
+  document.getElementById('fullResults').innerHTML = fh;
+  updateStats();
+}
+
+// ============================================================
+// TAKVİM
+// ============================================================
+let scheduleWeekStart = null;
+
+function getMonday(d) {
+  const t = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const diff = t.getDate() - t.getDay() + (t.getDay() === 0 ? -6 : 1);
+  t.setDate(diff);
+  return t;
+}
+
+function prevWeek() {
+  if (!scheduleWeekStart) scheduleWeekStart = getMonday(new Date());
+  scheduleWeekStart = new Date(scheduleWeekStart);
+  scheduleWeekStart.setDate(scheduleWeekStart.getDate() - 7);
+  document.getElementById('scheduleStart').value = scheduleWeekStart.toISOString().split('T')[0];
+  showSchedule();
+}
+function nextWeek() {
+  if (!scheduleWeekStart) scheduleWeekStart = getMonday(new Date());
+  scheduleWeekStart = new Date(scheduleWeekStart);
+  scheduleWeekStart.setDate(scheduleWeekStart.getDate() + 7);
+  document.getElementById('scheduleStart').value = scheduleWeekStart.toISOString().split('T')[0];
+  showSchedule();
+}
+
+function showSchedule() {
+  const ds = document.getElementById('scheduleStart').value;
+  if (!ds) {
+    scheduleWeekStart = getMonday(new Date());
+    document.getElementById('scheduleStart').value = scheduleWeekStart.toISOString().split('T')[0];
+  } else {
+    const [y,m,d] = ds.split('-').map(Number);
+    scheduleWeekStart = new Date(y, m-1, d);
+  }
+
+  const isletmeF = document.getElementById('scheduleIsletme').value;
+  const list = isletmeF ? personnel.filter(p => p.isletme === isletmeF) : personnel;
+
+  if (!list.length) {
+    document.getElementById('scheduleGrid').innerHTML = '<div class="empty-state">GÖSTERİLECEK PERSONEL YOK</div>'; return;
+  }
+
+  const DAY_NAMES = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  let html = '<div class="schedule-header-row">';
+  html += '<div class="sch-cell sch-head" style="text-align:left;padding-left:10px">PERSONEL</div>';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(scheduleWeekStart); d.setDate(d.getDate() + i);
+    const isToday = d.getTime() === today.getTime();
+    const dow = d.getDay() === 0 ? 6 : d.getDay()-1;
+    const dd = d.getDate().toString().padStart(2,'0');
+    const mm = (d.getMonth()+1).toString().padStart(2,'0');
+    const tatil = getResmiTatil(d);
+    if (tatil) {
+      html += `<div class="sch-cell" style="background:#1a0f1f;color:#c084fc;border:1px solid #6d28d9;font-size:10px;text-align:center" title="${tatil}">🇹🇷 ${DAY_NAMES[dow]}<br>${dd}.${mm}<br><span style="font-size:8px;opacity:0.8">${tatil.length>18?tatil.slice(0,16)+'…':tatil}</span></div>`;
+    } else {
+      html += `<div class="sch-cell ${isToday?'sch-today':'sch-head'}">${DAY_NAMES[dow]}<br>${dd}.${mm}</div>`;
+    }
+  }
+  html += '</div>';
+
+  const sorted = [...list].sort((a,b) => (a.isletme||'').localeCompare(b.isletme||'') || a.shift.localeCompare(b.shift) || a.name.localeCompare(b.name));
+
+  sorted.forEach(p => {
+    const base     = p.shift.replace('G','');
+    const isGunduz = p.shift.endsWith('G') && p.shift !== 'GD';
+    const isGD     = p.shift === 'GD';
+    const badge    = `<span class="isletme-badge" style="font-size:9px;padding:1px 4px">${p.isletme||''}</span>`;
+    html += '<div class="schedule-body-row">';
+    html += `<div class="sch-cell sch-name"><span class="shift-block shift-${p.shift}" style="width:20px;height:20px;font-size:11px">${shiftLabel(p.shift)}</span>${p.name} ${badge}</div>`;
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(scheduleWeekStart); d.setDate(d.getDate() + i);
+      if (isOnLeave(p, d)) {
+        html += '<div class="sch-cell sch-work" style="background:#1a0a00;color:#f97316;border:1px solid #7c2d12;font-size:10px">🏖 İZİN</div>';
+      } else if (isGD) {
+        const dow = d.getDay();
+        if (dow === 0 || dow === 6) {
+          html += '<div class="sch-cell sch-off">HAFTA TATİLİ</div>';
+        } else if (getResmiTatil(d)) {
+          html += `<div class="sch-cell sch-work" style="background:#1a0f2e;color:#c084fc;border:1px solid #6d28d9;font-size:10px" title="${getResmiTatil(d)}">🇹🇷 RESMİ<br>TATİL</div>`;
+        } else {
+          html += '<div class="sch-cell sch-work sch-work-gd"><span>GÜNDÜZ</span><span style="font-size:9px;opacity:0.7">08-18</span></div>';
+        }
+      } else {
+        const st = getShiftStatus(base, d);
+        const tatil = getResmiTatil(d);
+        if (!st.working) {
+          html += '<div class="sch-cell sch-off">HAFTA TATİLİ</div>';
+        } else if (isGunduz) {
+          if (tatil) {
+            html += `<div class="sch-cell sch-work" style="background:#1a0f2e;color:#c084fc;border:1px solid #6d28d9;font-size:10px" title="${tatil}">🇹🇷 RESMİ<br>TATİL</div>`;
+          } else {
+            html += '<div class="sch-cell sch-work sch-work-gunduz"><span>GÜNDÜZ</span><span style="font-size:9px;opacity:0.7">08-16</span></div>';
+          }
+        } else {
+          const sl = st.timeSlot;
+          if (tatil) {
+            html += `<div class="sch-cell sch-work ${sl.cssClass}" style="border-color:#7c3aed" title="${tatil}"><span>${sl.shortLabel}</span><span style="font-size:8px;opacity:0.7">${sl.start.toString().padStart(2,'0')}-${sl.end.toString().padStart(2,'0')}</span><span style="font-size:8px;color:#c084fc">🇹🇷</span></div>`;
+          } else {
+            html += `<div class="sch-cell sch-work ${sl.cssClass}"><span>${sl.shortLabel}</span><span style="font-size:9px;opacity:0.7">${sl.start.toString().padStart(2,'0')}-${sl.end.toString().padStart(2,'0')}</span></div>`;
+          }
+        }
+      }
+    }
+    html += '</div>';
+  });
+
+  document.getElementById('scheduleGrid').innerHTML = html;
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function updateStats() {
+  const now    = new Date();
+  const slotId = getCurrentSlotId();
+  const slot   = SLOT_BY_ID[slotId];
+  document.getElementById('stat-total').textContent = personnel.length;
+  let working = 0, onLeave = 0, off = 0;
+  personnel.forEach(p => {
+    const res = isWorking(p, now, slotId);
+    if (res.working) working++;
+    else if (res.status.isLeave) onLeave++;
+    else off++;
+  });
+  document.getElementById('stat-working').textContent = working;
+  document.getElementById('stat-off').textContent     = onLeave;
+  document.getElementById('stat-shift').textContent   = `${slot.shortLabel}\n${slot.label}`;
+  document.getElementById('stat-shift').style.fontSize = '18px';
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const idx = ['query','personnel','schedule','adamhour','kivircik','mono_omur'].indexOf(tab);
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  if (tab === 'schedule') showSchedule();
+  if (tab === 'kivircik') renderKivircik();
+  if (tab === 'mono_omur') renderMono();
+}
+
+function calcAdamHour() {
+  const s = document.getElementById('ahStart').value;
+  const e = document.getElementById('ahEnd').value;
+  if (!s || !e) { alert('Lütfen başlangıç ve bitiş tarihi seçin!'); return; }
+  const [sy,sm,sd] = s.split('-').map(Number);
+  const [ey,em,ed] = e.split('-').map(Number);
+  const startDate = new Date(sy, sm-1, sd);
+  const endDate   = new Date(ey, em-1, ed);
+  if (endDate < startDate) { alert('Bitiş tarihi başlangıçtan önce olamaz!'); return; }
+
+  const isletmeF = document.getElementById('ahIsletme').value;
+  const list = isletmeF ? personnel.filter(p => p.isletme === isletmeF) : personnel;
+  if (!list.length) { document.getElementById('ahResults').innerHTML = '<div class="empty-state">Personel bulunamadı.</div>'; return; }
+
+  // Gün sayısı
+  const totalDays = Math.round((endDate - startDate) / 86400000) + 1;
+
+  // Her personel için adam/saat hesapla
+  const results = list.map(p => {
+    let hours = 0;
+    let workDays = 0;
+    const isGD     = p.shift === 'GD';
+    const isGunduz = p.shift.endsWith('G') && !isGD;
+    const base     = p.shift.replace('G','');
+    const saatPerGun = isGD ? 9 : 7.5;
+
+    for (let i = 0; i < totalDays; i++) {
+      const d = new Date(startDate); d.setDate(d.getDate() + i);
+      // Yazılı izin kontrolü
+      if (isOnLeave(p, d)) continue;
+      // Resmi tatil kontrolü — GD ve Gündüz sabit için 0
+      if (getResmiTatil(d) && (isGD || isGunduz)) continue;
+      if (isGD) {
+        const dow = d.getDay();
+        if (dow === 0 || dow === 6) continue; // hafta sonu
+        hours += saatPerGun;
+        workDays++;
+      } else if (isGunduz) {
+        const st = getShiftStatus(base, d);
+        if (!st.working) continue;
+        hours += saatPerGun;
+        workDays++;
+      } else {
+        const st = getShiftStatus(base, d);
+        if (!st.working) continue;
+        hours += saatPerGun;
+        workDays++;
+      }
+    }
+    return { ...p, hours, workDays };
+  });
+
+  // Toplam
+  const grandTotal = results.reduce((a, r) => a + r.hours, 0);
+  const grandDays  = results.reduce((a, r) => a + r.workDays, 0);
+
+  // Gruba göre özet
+  const byShift = {};
+  results.forEach(r => {
+    if (!byShift[r.shift]) byShift[r.shift] = { count: 0, hours: 0 };
+    byShift[r.shift].count++;
+    byShift[r.shift].hours += r.hours;
+  });
+
+  const MONTHS = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+  const fmt = d => `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+
+  let html = `
+  <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;gap:24px;flex-wrap:wrap;align-items:center">
+    <div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2)">
+      📅 ${fmt(startDate)} — ${fmt(endDate)} &nbsp;|&nbsp; ${totalDays} GÜN
+      ${isletmeF ? ` &nbsp;|&nbsp; İşletme: <span style="color:var(--blue)">${isletmeF}</span>` : ''}
+    </div>
+    <div style="display:flex;gap:16px;margin-left:auto;flex-wrap:wrap">
+      <div style="text-align:center;padding:12px 20px;background:var(--bg);border:1px solid var(--accent)">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:32px;color:var(--accent)">${grandTotal.toLocaleString('tr-TR', {minimumFractionDigits:1,maximumFractionDigits:1})}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);margin-top:4px">TOPLAM ADAM/SAAT</div>
+      </div>
+      <div style="text-align:center;padding:12px 20px;background:var(--bg);border:1px solid var(--border2)">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:32px;color:var(--blue)">${list.length}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);margin-top:4px">PERSONEL SAYISI</div>
+      </div>
+      <div style="text-align:center;padding:12px 20px;background:var(--bg);border:1px solid var(--border2)">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:32px;color:var(--green)">${grandDays}</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);margin-top:4px">TOPLAM ÇALIŞMA GÜNÜ</div>
+      </div>
+    </div>
+  </div>`;
+
+  // Vardiya grubu özeti
+  html += `<div style="padding:16px 24px;border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap">
+    <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);align-self:center;margin-right:6px">GRUBA GÖRE:</div>`;
+  Object.entries(byShift).sort().forEach(([sh, data]) => {
+    html += `<div style="padding:8px 14px;background:var(--surface2);border:1px solid var(--border2);text-align:center">
+      <span class="shift-block shift-${sh}" style="width:18px;height:18px;font-size:10px;display:inline-flex;align-items:center;justify-content:center">${shiftLabel(sh)}</span>
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-left:6px">${data.hours.toLocaleString('tr-TR',{minimumFractionDigits:1,maximumFractionDigits:1})} saat</span>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);margin-left:4px">(${data.count} kişi)</span>
+    </div>`;
+  });
+  html += '</div>';
+
+  // Personel detay tablosu
+  html += `<div style="overflow-x:auto">
+  <table class="personnel-table">
+    <thead>
+      <tr>
+        <th>AD SOYAD</th>
+        <th>SİCİL</th>
+        <th>VARDİYA</th>
+        <th>İŞLETME</th>
+        <th style="text-align:right">ÇALIŞMA GÜNÜ</th>
+        <th style="text-align:right">SAAT/GÜN</th>
+        <th style="text-align:right">TOPLAM ADAM/SAAT</th>
+      </tr>
+    </thead>
+    <tbody>`;
+
+  const sorted = [...results].sort((a,b) => (a.isletme||'').localeCompare(b.isletme||'') || a.shift.localeCompare(b.shift) || a.name.localeCompare(b.name));
+  sorted.forEach(r => {
+    const saatPerGun = r.shift === 'GD' ? 9 : 7.5;
+    html += `<tr>
+      <td><span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px">${r.name}</span></td>
+      <td><span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text3)">${r.id}</span></td>
+      <td><span class="shift-block shift-${r.shift}" style="width:22px;height:22px;font-size:11px">${shiftLabel(r.shift)}</span> <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2)">${shiftFullLabel(r.shift)}</span></td>
+      <td><span class="isletme-badge">${r.isletme||'—'}</span></td>
+      <td style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:13px">${r.workDays}</td>
+      <td style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text2)">${saatPerGun}</td>
+      <td style="text-align:right;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;color:var(--accent)">${r.hours.toLocaleString('tr-TR',{minimumFractionDigits:1,maximumFractionDigits:1})}</td>
+    </tr>`;
+  });
+
+  // Toplam satırı
+  html += `<tr style="background:var(--surface2);border-top:2px solid var(--accent)">
+    <td colspan="4" style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:14px;letter-spacing:2px;color:var(--accent)">GENEL TOPLAM</td>
+    <td style="text-align:right;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;color:var(--accent)">${grandDays}</td>
+    <td></td>
+    <td style="text-align:right;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:var(--accent)">${grandTotal.toLocaleString('tr-TR',{minimumFractionDigits:1,maximumFractionDigits:1})}</td>
+  </tr>`;
+
+  html += '</tbody></table></div>';
+  document.getElementById('ahResults').innerHTML = html;
+}
+
+function updateClock() {
+  const n = new Date();
+  document.getElementById('liveClock').textContent = [n.getHours(),n.getMinutes(),n.getSeconds()].map(x=>x.toString().padStart(2,'0')).join(':');
+  const DAYS   = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+  const MONTHS = ['OCA','ŞUB','MAR','NİS','MAY','HAZ','TEM','AĞU','EYL','EKİ','KAS','ARA'];
+  document.getElementById('liveDate').textContent = `${DAYS[n.getDay()].toUpperCase()}, ${n.getDate()} ${MONTHS[n.getMonth()]} ${n.getFullYear()}`;
+}
+
+document.getElementById('editModal').addEventListener('click', e => { if (e.target === document.getElementById('editModal')) closeEditModal(); });
+document.getElementById('leaveModal').addEventListener('click', e => { if (e.target === document.getElementById('leaveModal')) closeLeaveModal(); });
+
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  document.getElementById('themeBtn').textContent = isLight ? '🌑' : '🌙';
+  try { localStorage.setItem('vardiya_theme', isLight ? 'light' : 'dark'); } catch(e){}
+}
+
+async function init() {
+  // Kaydedilmiş tema yükle
+  try {
+    if (localStorage.getItem('vardiya_theme') === 'light') {
+      document.body.classList.add('light');
+      document.getElementById('themeBtn').textContent = '🌑';
+    }
+  } catch(e){}
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  const now = new Date();
+  document.getElementById('queryDate').value = now.toISOString().split('T')[0];
+  document.getElementById('querySlot').value = getCurrentSlotId();
+  scheduleWeekStart = getMonday(now);
+  document.getElementById('scheduleStart').value = scheduleWeekStart.toISOString().split('T')[0];
+
+  renderPersonnelList();
+  updateStats();
+
+  // Referans personel listesi (ilk açılışta veya eksik sicil varsa kullanılır)
+  const realPersonnel = [
+    { id:'12133', name:'YAKUP KUŞDEMİR',       shift:'A',  isletme:'CP11' },
+    { id:'17496', name:'AHMET KARATAŞ',         shift:'A',  isletme:'CP11' },
+    { id:'17485', name:'FATİH FEVZİ GÜÇ',      shift:'A',  isletme:'CP11' },
+    { id:'17644', name:'YASİN SAMET RENCİ',     shift:'A',  isletme:'CP11' },
+    { id:'15010', name:'HAKAN ERDOĞAN',         shift:'A',  isletme:'CP1237' },
+    { id:'12369', name:'CEYHUN BEKAR',          shift:'AG', isletme:'CP11' },
+    { id:'13332', name:'MEHMET REŞİT DEDECAN',  shift:'AG', isletme:'CP11' },
+    { id:'17563', name:'SERKAN AKBALIK',        shift:'AG', isletme:'CP11' },
+    { id:'11567', name:'MUSTAFA ÇÖRTÜK',        shift:'B',  isletme:'CP11' },
+    { id:'15761', name:'VEYSEL BEKTAŞ',         shift:'B',  isletme:'CP11' },
+    { id:'13697', name:'HÜSEYİN ŞAHBAZ',       shift:'B',  isletme:'CP11' },
+    { id:'16939', name:'HASAN AYHAN',           shift:'B',  isletme:'CP11' },
+    { id:'12137', name:'MUSTAFA TOKTAŞ',        shift:'BG', isletme:'CP11' },
+    { id:'11876', name:'TAYFUN GÜLER',          shift:'BG', isletme:'CP11' },
+    { id:'11821', name:'MUSTAFA KÖKLÜDAĞ',      shift:'BG', isletme:'CP11' },
+    { id:'14928', name:'VAHDET SEDEFOĞLU',      shift:'BG', isletme:'CP11' },
+    { id:'15897', name:'HAYRULLAH KÜÇÜK',       shift:'BG', isletme:'CP1237' },
+    { id:'17253', name:'YAŞAR DEMİR',           shift:'BG', isletme:'CP1237' },
+    { id:'11052', name:'SALİH ÇANKAYA',         shift:'C',  isletme:'CP11' },
+    { id:'15758', name:'BARIŞ KARADAĞ',         shift:'C',  isletme:'CP11' },
+    { id:'17327', name:'GÖKAY ULUKIŞLA',        shift:'C',  isletme:'CP11' },
+    { id:'10853', name:'MURAT ŞEN',             shift:'C',  isletme:'CP1237' },
+    { id:'16599', name:'SUAT ÖZGÜL',            shift:'CG', isletme:'CP11' },
+    { id:'15656', name:'EFE EFKAN ATEŞ',        shift:'CG', isletme:'CP11' },
+    { id:'17481', name:'MUSTAFA ÇELİK',         shift:'CG', isletme:'CP11' },
+    { id:'15759', name:'MURAT ORUÇ',            shift:'D',  isletme:'CP11' },
+    { id:'17634', name:'ENVER DİNÇER',          shift:'D',  isletme:'CP11' },
+    { id:'11791', name:'OKTAY OLGUN',           shift:'D',  isletme:'CP11' },
+    { id:'14782', name:'MEHMET BAYSU',          shift:'D',  isletme:'CP1237' },
+    { id:'10856', name:'İSKENDER SOYALP',       shift:'DG', isletme:'CP11' },
+    { id:'12185', name:'HARUN DEĞİRMENCİ',      shift:'DG', isletme:'CP11' },
+    { id:'15760', name:'TALAT TATAR',           shift:'DG', isletme:'CP11' },
+    { id:'16089', name:'HASAN YAVAŞ',           shift:'DG', isletme:'CP1237' },
+    { id:'12061', name:'ENGİN KIZIL',           shift:'GD', isletme:'CP8' },
+    { id:'12151', name:'ERKUT TOK',             shift:'GD', isletme:'CP8' },
+  ];
+
+  // Kayıtlı veri yoksa (ilk açılış) listeyi yükle.
+  // Kayıtlı veri varsa sadece eksik sicilleri ekle — mevcut kayıtlara DOKUNMA.
+  // Sheets'ten yükle
+  showSyncStatus('Veriler yükleniyor...', false);
+  try {
+    const resp = await fetch(SHEETS_URL);
+    const json = await resp.json();
+    if (json.status === 'ok' && json.data && json.data.length > 0) {
+      personnel = json.data;
+      showSyncStatus('✓ Veriler yüklendi', false);
+    } else {
+      // İlk açılış: Sheets boş, sabit listeyi yükle
+      personnel = realPersonnel.map(p => ({ ...p, leaves: [], createdAt: new Date().toISOString() }));
+      await sheetsPost({ action: 'init', data: personnel });
+      showSyncStatus('✓ İlk kurulum tamamlandı', false);
+    }
+  } catch(e) {
+    showSyncStatus('⚠ Sheets bağlantı hatası! Çevrimdışı mod.', true);
+  }
+  renderPersonnelList(); updateStats();
+}
+
+// ═══════════════════════════════════════════════════════
+// KIVIRCIK TAKİP — VERİ & MANTIK
+// ═══════════════════════════════════════════════════════
+
+const HAT_LABELS = {
+  'LINE-1': 'LINE-1 (MONO-1)',
+  'LINE-2': 'LINE-2 (MONO-2)',
+  'LINE-3': 'LINE-3 (BICO)',
+  'LINE-4': 'LINE-4 (MONO-3)',
+  'LINE-5': 'LINE-5 (MONO-4)',
+  'LINE-6': 'LINE-6 (LOWMELT)'
+};
+const HAT_IDX = {'LINE-1':1,'LINE-2':2,'LINE-3':3,'LINE-4':4,'LINE-5':5,'LINE-6':6};
+
+// Excel seri numarasını JS tarihine çevir
+function excelSerialToDate(serial) {
+  if (!serial || isNaN(serial)) return null;
+  const d = new Date(Math.round((serial - 25569) * 86400 * 1000));
+  return d.toISOString().split('T')[0];
+}
+
+function loadKivircikData() {
+  try {
+    const raw = localStorage.getItem('kivircik_data');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  // Başlangıç verisi — Excel'den
+  return [
+    // LINE-1
+    {hat:'LINE-1',no:'5',montaj:'2025-03-03',sokulme:'2025-06-08',gun:97,puruz:'',vardiyaGoz:'',atolyeGoz:''},
+    {hat:'LINE-1',no:'1',montaj:'2025-06-08',sokulme:'2026-01-07',gun:243,puruz:'',vardiyaGoz:'Üst Kutu Yağ Kaçağı',atolyeGoz:'Üst Kutu Yağ Kaçağı'},
+    {hat:'LINE-1',no:'4',montaj:'2026-01-07',sokulme:'',gun:'',puruz:'',vardiyaGoz:'',atolyeGoz:''},
+    // LINE-2
+    {hat:'LINE-2',no:'3',montaj:'',sokulme:'',gun:'',puruz:'',vardiyaGoz:'Üst kutu hidrolik yağ kaçağı',atolyeGoz:'Hortum birleşim yerinden yağ kaçırdığı görüldü.'},
+    {hat:'LINE-2',no:'2',montaj:'',sokulme:'2025-11-27',gun:'',puruz:'',vardiyaGoz:'Makine tıkama ve işletmenin kaldıramaması sorunu',atolyeGoz:'Silindir ve kutuda hasar mevcut, silindir kaldırma pistonu arızalı'},
+    {hat:'LINE-2',no:'3',montaj:'2025-11-27',sokulme:'2026-02-09',gun:'',puruz:'',vardiyaGoz:'',atolyeGoz:''},
+    {hat:'LINE-2',no:'2',montaj:'2026-02-09',sokulme:'',gun:'',puruz:'',vardiyaGoz:'',atolyeGoz:''},
+    // LINE-3
+    {hat:'LINE-3',no:'2',montaj:'',sokulme:'2025-12-25',gun:'',puruz:'',vardiyaGoz:'Yağ kaçağından dolayı',atolyeGoz:''},
+    {hat:'LINE-3',no:'1',montaj:'2026-01-14',sokulme:'',gun:'',puruz:'',vardiyaGoz:'',atolyeGoz:''},
+    // LINE-4
+    {hat:'LINE-4',no:'6',montaj:'',sokulme:'2025-09-12',gun:'',puruz:'',vardiyaGoz:'',atolyeGoz:''},
+    {hat:'LINE-4',no:'3',montaj:'2025-09-12',sokulme:'2025-12-12',gun:81,puruz:'',vardiyaGoz:'Üst kutu yağ kaçağı nedeni ile',atolyeGoz:''},
+    {hat:'LINE-4',no:'6',montaj:'2025-12-12',sokulme:'2026-03-11',gun:91,puruz:'',vardiyaGoz:'İşletme makine tıkama ve kaldıramama sorunu',atolyeGoz:'Silindir kenarında hasar mevcut'},
+    {hat:'LINE-4',no:'7',montaj:'2026-03-11',sokulme:'2026-06-08',gun:93,puruz:'',vardiyaGoz:'Alt kazıyıcı yağ kaçağı',atolyeGoz:''},
+    {hat:'LINE-4',no:'6',montaj:'2026-06-08',sokulme:'',gun:'',puruz:'',vardiyaGoz:'',atolyeGoz:''},
+    // LINE-5
+    {hat:'LINE-5',no:'4',montaj:'',sokulme:'2025-10-23',gun:'',puruz:'',vardiyaGoz:'Yağ kaçağı nedeniyle',atolyeGoz:''},
+    {hat:'LINE-5',no:'5',montaj:'2025-09-23',sokulme:'2025-10-23',gun:31,puruz:'',vardiyaGoz:'Alt kazıyıcının komutsuz açması',atolyeGoz:''},
+    {hat:'LINE-5',no:'8',montaj:'2025-10-23',sokulme:'2025-10-29',gun:6,puruz:'',vardiyaGoz:'Kaydırma nedeniyle',atolyeGoz:''},
+    {hat:'LINE-5',no:'4',montaj:'2025-10-29',sokulme:'2025-11-28',gun:30,puruz:'',vardiyaGoz:'Kaydırma ve kazıyıcı-yan plaka arasına elyaf alması',atolyeGoz:'Kaydırma ve kazıyıcı-yan plaka arasına elyaf alması'},
+    {hat:'LINE-5',no:'5',montaj:'2025-11-28',sokulme:'2025-12-06',gun:8,puruz:'',vardiyaGoz:'Kıvırcık alt kazıyıcı açma sebebinden değişimi yapıldı.',atolyeGoz:''},
+    {hat:'LINE-5',no:'8',montaj:'2025-12-06',sokulme:'2026-02-03',gun:59,puruz:'',vardiyaGoz:'Yağ kaçağı nedeniyle',atolyeGoz:''},
+    {hat:'LINE-5',no:'5',montaj:'2026-02-03',sokulme:'2026-03-01',gun:26,puruz:'',vardiyaGoz:'Kuzey kenar problemi',atolyeGoz:''},
+    {hat:'LINE-5',no:'1',montaj:'2026-04-20',sokulme:'',gun:'',puruz:'',vardiyaGoz:'',atolyeGoz:''},
+    // LINE-6
+    {hat:'LINE-6',no:'1',montaj:'',sokulme:'2025-12-02',gun:'',puruz:'',vardiyaGoz:'Alt kazıyıcı elyaf takılması nedeni ile',atolyeGoz:'Kazıyıcılarda hasar görüldü'},
+    {hat:'LINE-6',no:'2',montaj:'2025-12-02',sokulme:'2025-12-23',gun:21,puruz:'',vardiyaGoz:'Kıvırcık tıkama sebebi ile',atolyeGoz:''},
+    {hat:'LINE-6',no:'1',montaj:'2025-12-23',sokulme:'2025-12-24',gun:1,puruz:'',vardiyaGoz:'Kıvırcık tıkama ve yağ kaçağı sebebi ile',atolyeGoz:''},
+    {hat:'LINE-6',no:'2',montaj:'2025-12-24',sokulme:'2025-12-31',gun:7,puruz:'',vardiyaGoz:'Kaydırma',atolyeGoz:''},
+    {hat:'LINE-6',no:'1',montaj:'2026-01-09',sokulme:'2026-01-09',gun:0,puruz:'',vardiyaGoz:'Tıkama',atolyeGoz:''},
+    {hat:'LINE-6',no:'2',montaj:'2026-01-09',sokulme:'',gun:'',puruz:'',vardiyaGoz:'',atolyeGoz:''},
+  ];
+}
+
+function saveKivircikData(data) {
+  try {
+    fetch(SHEETS_URL, { method: 'POST', body: JSON.stringify({ action: 'syncKivircik', data }) });
+  } catch(e) {}
+}
+
+let kivircikData = loadKivircikData();
+let kivActiveHat = 'ALL';
+
+function kivircikSelectHat(hat) {
+  kivActiveHat = hat;
+  document.querySelectorAll('.kiv-hat-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.hat === hat);
+  });
+  renderKivircik();
+}
+
+function calcGun(montaj, sokulme) {
+  if (!montaj || !sokulme) return '';
+  const a = new Date(montaj), b = new Date(sokulme);
+  const diff = Math.round((b - a) / 86400000);
+  return diff >= 0 ? diff : '';
+}
+
+function renderKivircik() {
+  const filtered = kivActiveHat === 'ALL'
+    ? kivircikData
+    : kivircikData.filter(r => r.hat === kivActiveHat);
+
+  // Özet kartlar (her hat için aktif kıvırcık)
+  const statsEl = document.getElementById('kiv-stats-row');
+  const hatKeys = ['LINE-1','LINE-2','LINE-3','LINE-4','LINE-5','LINE-6'];
+  statsEl.innerHTML = hatKeys.map(hat => {
+    const hatData = kivircikData.filter(r => r.hat === hat);
+    const aktif = hatData.find(r => r.montaj && !r.sokulme);
+    const toplamDeg = hatData.filter(r => r.sokulme).length;
+    const cls = 'kiv-hat-' + HAT_IDX[hat];
+    return `<div class="kiv-stat-card" style="cursor:pointer;${kivActiveHat===hat?'border-bottom:2px solid var(--accent)':''}" onclick="kivircikSelectHat('${hat}')">
+      <div class="kiv-stat-val">${aktif ? '#'+aktif.no : '—'}</div>
+      <div class="kiv-stat-lbl">${hat} — AKTİF</div>
+      <div style="margin-top:6px"><span class="kiv-hat-badge ${cls}">${HAT_LABELS[hat]}</span></div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);margin-top:4px">${toplamDeg} değişim</div>
+    </div>`;
+  }).join('');
+
+  // Tablo
+  const tbody = document.getElementById('kiv-tbody');
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="10" class="no-results">Bu hat için kayıt yok.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map((r, i) => {
+    // global index
+    const gIdx = kivircikData.indexOf(r);
+    const hatCls = 'kiv-hat-' + (HAT_IDX[r.hat] || 1);
+    const gun = r.gun !== '' && r.gun !== undefined ? r.gun : calcGun(r.montaj, r.sokulme);
+    const aktif = r.montaj && !r.sokulme;
+    return `<tr style="${aktif ? 'background:rgba(245,158,11,0.06)' : ''}">
+      <td style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text3)">${i+1}</td>
+      <td><span class="kiv-hat-badge ${hatCls}">${r.hat}</span></td>
+      <td><span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:var(--accent)">${r.no||'—'}</span></td>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:12px">${r.montaj||'—'}</td>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:12px">${r.sokulme ? r.sokulme : '<span style="color:var(--green);font-family:\'Share Tech Mono\',monospace;font-size:11px">● AKTİF</span>'}</td>
+      <td style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:${gun!==''?'var(--blue)':'var(--text3)'}">${gun!=='' ? gun : '—'}</td>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:12px">${r.puruz||'—'}</td>
+      <td style="font-size:12px;max-width:200px">${r.vardiyaGoz||'—'}</td>
+      <td style="font-size:12px;max-width:200px">${r.atolyeGoz||'—'}</td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-edit" onclick="kivircikEdit(${gIdx})">✎</button>
+          <button class="btn btn-danger" onclick="kivircikDelete(${gIdx})">✕</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function kivircikEdit(idx) {
+  const r = kivircikData[idx];
+  document.getElementById('kivModalTitle').textContent = '✎ KAYIT DÜZENLE';
+  document.getElementById('kivEditIdx').value = idx;
+  document.getElementById('kivHat').value = r.hat;
+  document.getElementById('kivNo').value = r.no;
+  document.getElementById('kivMontaj').value = r.montaj || '';
+  document.getElementById('kivSokulme').value = r.sokulme || '';
+  document.getElementById('kivPuruzluluk').value = r.puruz || '';
+  document.getElementById('kivVardiyaGoz').value = r.vardiyaGoz || '';
+  document.getElementById('kivAtolyeGoz').value = r.atolyeGoz || '';
+  document.getElementById('kivModal').classList.add('open');
+}
+
+function kivircikAddRow() {
+  document.getElementById('kivModalTitle').textContent = '+ YENİ KIVIRCIK KAYDI';
+  document.getElementById('kivEditIdx').value = '';
+  document.getElementById('kivHat').value = kivActiveHat !== 'ALL' ? kivActiveHat : 'LINE-1';
+  document.getElementById('kivNo').value = '';
+  document.getElementById('kivMontaj').value = new Date().toISOString().split('T')[0];
+  document.getElementById('kivSokulme').value = '';
+  document.getElementById('kivPuruzluluk').value = '';
+  document.getElementById('kivVardiyaGoz').value = '';
+  document.getElementById('kivAtolyeGoz').value = '';
+  document.getElementById('kivModal').classList.add('open');
+}
+
+function closeKivModal() {
+  document.getElementById('kivModal').classList.remove('open');
+}
+
+function saveKivRecord() {
+  const idx = document.getElementById('kivEditIdx').value;
+  const rec = {
+    hat: document.getElementById('kivHat').value,
+    no: document.getElementById('kivNo').value.trim(),
+    montaj: document.getElementById('kivMontaj').value,
+    sokulme: document.getElementById('kivSokulme').value,
+    puruz: document.getElementById('kivPuruzluluk').value.trim(),
+    vardiyaGoz: document.getElementById('kivVardiyaGoz').value.trim(),
+    atolyeGoz: document.getElementById('kivAtolyeGoz').value.trim(),
+    gun: ''
+  };
+  if (rec.montaj && rec.sokulme) {
+    rec.gun = calcGun(rec.montaj, rec.sokulme);
+  }
+  if (idx !== '') {
+    kivircikData[parseInt(idx)] = rec;
+  } else {
+    kivircikData.push(rec);
+  }
+  saveKivircikData(kivircikData);
+  closeKivModal();
+  renderKivircik();
+}
+
+function kivircikDelete(idx) {
+  if (!confirm('Bu kaydı silmek istiyor musunuz?')) return;
+  kivircikData.splice(idx, 1);
+  saveKivircikData(kivircikData);
+  renderKivircik();
+}
+
+function kivircikExportExcel() {
+  const rows = [
+    ['HAT', 'KIVIRCIK NO', 'MONTAJ TARİHİ', 'SÖKÜLME TARİHİ', 'ÇALIŞTIĞI GÜN', 'PÜRÜZLÜLÜK', 'VARDİYADA GÖZLEMLENEN DEĞİŞİM NEDENİ', 'KIVIRCIK ATÖLYESİNDE GÖZLEMLEME']
+  ];
+
+  const hatKeys = ['LINE-1','LINE-2','LINE-3','LINE-4','LINE-5','LINE-6'];
+  hatKeys.forEach(hat => {
+    const hatData = kivircikData.filter(r => r.hat === hat);
+    if (hatData.length === 0) return;
+    rows.push([HAT_LABELS[hat], '', '', '', '', '', '', '']);
+    hatData.forEach(r => {
+      const gun = r.gun !== '' && r.gun !== undefined ? r.gun : calcGun(r.montaj, r.sokulme);
+      rows.push([
+        r.hat,
+        r.no,
+        r.montaj || '',
+        r.sokulme || '',
+        gun !== '' ? gun : '',
+        r.puruz || '',
+        r.vardiyaGoz || '',
+        r.atolyeGoz || ''
+      ]);
+    });
+    rows.push(['', '', '', '', '', '', '', '']);
+  });
+
+  // CSV oluştur (UTF-8 BOM ile Excel Türkçe karakter desteği)
+  const bom = '\uFEFF';
+  const csv = bom + rows.map(r => r.map(c => {
+    const s = String(c).replace(/"/g, '""');
+    return /[,;\n"]/.test(s) ? `"${s}"` : s;
+  }).join(';')).join('\r\n');
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Kivircik_Degisim_Cizelgesi_' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+
+// ===== MONO KIVIRCIK SİLİNDİR TAKIM ÖMÜRLERİ =====
+const MONO_STORAGE_KEY = 'mono_silindir_takimlari_v1';
+let monoData = [];
+
+function monoLoadData() {
+  try {
+    const saved = localStorage.getItem(MONO_STORAGE_KEY);
+    if (saved) {
+      monoData = JSON.parse(saved);
+    } else {
+      monoData = [
+        { name: '6 Nolu Takım', boyUst: 800.17, boyAlt: 800.17, capUst: 339.77, capAlt: 339.77, not: '' },
+        { name: '8 Nolu Takım', boyUst: 799.56, boyAlt: 799.60, capUst: 339.78, capAlt: 339.78, not: '' },
+        { name: '2 Nolu Takım', boyUst: 799.40, boyAlt: 799.65, capUst: 339.80, capAlt: 339.80, not: '' },
+        { name: '4 Nolu Takım', boyUst: 799.70, boyAlt: 799.60, capUst: 339.74, capAlt: 339.74, not: '' },
+      ];
+      monoSaveData();
+    }
+  } catch(e) { monoData = []; }
+}
+
+function monoSaveData() {
+  try {
+    fetch(SHEETS_URL, { method: 'POST', body: JSON.stringify({ action: 'syncMono', data: monoData }) });
+  } catch(e) {}
+}
+
+function monoCalcKondisyonBoy(boyUst, boyAlt) {
+  return (Math.min(boyUst, boyAlt) - 796) * 25;
+}
+function monoCalcKondisyonCap(capUst, capAlt) {
+  return (Math.min(capUst, capAlt) - 336) * 25;
+}
+function monoCalcOmur(boyUst, boyAlt) {
+  return Math.round((Math.min(boyUst, boyAlt) - 796) / 0.3) - 1;
+}
+function monoGetKondisyonStyle(val) {
+  if (val <= 80) return 'color:var(--red);font-weight:bold';
+  if (val <= 90) return 'color:#f97316;font-weight:bold';
+  return 'color:var(--green)';
+}
+function monoGetOmurStyle(val) {
+  if (val <= 5) return 'color:var(--red);font-weight:bold';
+  if (val <= 10) return 'color:#f97316;font-weight:bold';
+  return 'color:var(--green)';
+}
+
+function renderMono() {
+  monoLoadData();
+  const tbody = document.getElementById('mono-tbody');
+  if (!tbody) return;
+
+  let html = '';
+  let iyi = 0, kritik = 0, omurToplam = 0;
+
+  monoData.forEach((row, i) => {
+    const kBoy = monoCalcKondisyonBoy(row.boyUst, row.boyAlt);
+    const kCap = monoCalcKondisyonCap(row.capUst, row.capAlt);
+    const kMin = Math.min(kBoy, kCap);
+    const omur = monoCalcOmur(row.boyUst, row.boyAlt);
+    if (kMin <= 80) kritik++; else iyi++;
+    omurToplam += omur;
+
+    html += `<tr>
+      <td style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px">${row.name}</td>
+      <td style="text-align:center;font-family:'Share Tech Mono',monospace">${row.boyUst.toFixed(2)}</td>
+      <td style="text-align:center;font-family:'Share Tech Mono',monospace">${row.boyAlt.toFixed(2)}</td>
+      <td style="text-align:center;font-family:'Share Tech Mono',monospace">${row.capUst.toFixed(2)}</td>
+      <td style="text-align:center;font-family:'Share Tech Mono',monospace">${row.capAlt.toFixed(2)}</td>
+      <td style="font-size:12px;color:var(--text3)">${row.not || ''}</td>
+      <td style="text-align:center;font-family:'Share Tech Mono',monospace;${monoGetKondisyonStyle(kMin)}">${kMin.toFixed(2)}</td>
+      <td style="text-align:center;font-family:'Share Tech Mono',monospace;${monoGetKondisyonStyle(kBoy)}">${kBoy.toFixed(2)}</td>
+      <td style="text-align:center;font-family:'Share Tech Mono',monospace;${monoGetKondisyonStyle(kCap)}">${kCap.toFixed(2)}</td>
+      <td style="text-align:center;font-family:'Share Tech Mono',monospace;${monoGetOmurStyle(omur)}">${omur}</td>
+      <td style="text-align:center">
+        <div style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap">
+          <button class="btn btn-edit" onclick="monoEditRow(${i})" style="font-size:10px;padding:4px 8px">DÜZENLE</button>
+          <button class="btn btn-danger" onclick="monoDeleteRow(${i})" style="font-size:10px;padding:4px 8px">SİL</button>
+        </div>
+      </td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = html;
+  const elId = id => document.getElementById(id);
+  if (elId('mono-stat-takım')) elId('mono-stat-takım').textContent = monoData.length;
+  if (elId('mono-stat-iyi'))   elId('mono-stat-iyi').textContent   = iyi;
+  if (elId('mono-stat-kritik')) elId('mono-stat-kritik').textContent = kritik;
+  if (elId('mono-stat-ort'))   elId('mono-stat-ort').textContent   = monoData.length > 0 ? Math.round(omurToplam / monoData.length) : 0;
+}
+
+function monoAddRow() {
+  const name   = document.getElementById('mono-add-name').value.trim();
+  const boyUst = parseFloat(document.getElementById('mono-add-boy-ust').value);
+  const boyAlt = parseFloat(document.getElementById('mono-add-boy-alt').value);
+  const capUst = parseFloat(document.getElementById('mono-add-cap-ust').value);
+  const capAlt = parseFloat(document.getElementById('mono-add-cap-alt').value);
+  const not    = document.getElementById('mono-add-not').value.trim();
+  if (!name || isNaN(boyUst) || isNaN(boyAlt) || isNaN(capUst) || isNaN(capAlt)) {
+    alert('Lütfen tüm ölçü alanlarını doldurun!'); return;
+  }
+  monoData.push({ name, boyUst, boyAlt, capUst, capAlt, not });
+  monoSaveData();
+  renderMono();
+  ['mono-add-name','mono-add-not'].forEach(id => document.getElementById(id).value = '');
+  ['mono-add-boy-ust','mono-add-boy-alt','mono-add-cap-ust','mono-add-cap-alt'].forEach(id => document.getElementById(id).value = '');
+}
+
+function monoDeleteRow(idx) {
+  if (!confirm('"' + monoData[idx].name + '" takımını silmek istediğinize emin misiniz?')) return;
+  monoData.splice(idx, 1);
+  monoSaveData();
+  renderMono();
+}
+
+function monoEditRow(idx) {
+  const row = monoData[idx];
+  const newName   = prompt('Takım Adı:', row.name);
+  if (newName === null) return;
+  const newBoyUst = parseFloat(prompt('Silindir Boy Üst (mm):', row.boyUst));
+  const newBoyAlt = parseFloat(prompt('Silindir Boy Alt (mm):', row.boyAlt));
+  const newCapUst = parseFloat(prompt('Silindir Çap Üst (mm):', row.capUst));
+  const newCapAlt = parseFloat(prompt('Silindir Çap Alt (mm):', row.capAlt));
+  const newNot    = prompt('Not:', row.not || '');
+  if (isNaN(newBoyUst) || isNaN(newBoyAlt) || isNaN(newCapUst) || isNaN(newCapAlt)) {
+    alert('Geçersiz değer!'); return;
+  }
+  monoData[idx] = { name: newName || row.name, boyUst: newBoyUst, boyAlt: newBoyAlt, capUst: newCapUst, capAlt: newCapAlt, not: newNot || '' };
+  monoSaveData();
+  renderMono();
+}
+
+function monoExportExcel() {
+  monoLoadData();
+  let csv = '\uFEFF';
+  csv += 'MONO KIVIRCIK SİLİNDİR TAKIM ÖLÇÜLERİ\n';
+  csv += 'Takım No,Silindir Boy Üst (mm),Silindir Boy Alt (mm),Silindir Çap Üst (mm),Silindir Çap Alt (mm),NOT,Kondisyon (Minimum),Kondisyon (Boy),Kondisyon (Çap),Ortalama Kalan Taşlama Ömrü\n';
+  monoData.forEach(row => {
+    const kBoy = monoCalcKondisyonBoy(row.boyUst, row.boyAlt);
+    const kCap = monoCalcKondisyonCap(row.capUst, row.capAlt);
+    const kMin = Math.min(kBoy, kCap);
+    const omur = monoCalcOmur(row.boyUst, row.boyAlt);
+    csv += row.name + ',' + row.boyUst + ',' + row.boyAlt + ',' + row.capUst + ',' + row.capAlt + ',' + (row.not||'') + ',' + kMin.toFixed(4) + ',' + kBoy.toFixed(4) + ',' + kCap.toFixed(4) + ',' + omur + '\n';
+  });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'MONO_Kivircik_Silindir_Takimlari.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+document.getElementById('kivModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('kivModal')) closeKivModal();
+});
+
+init().catch(e => console.error("Init hatası:", e));
+
+</script>
+</body>
+</html>
